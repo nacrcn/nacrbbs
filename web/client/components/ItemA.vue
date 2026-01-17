@@ -28,7 +28,15 @@
                 two: data.n_resources && data.n_resources.length === 2
             }]">
                 <div v-for="value in data.n_resources" :key="value.url" class="media-item">
-                    <img v-if="value.type === 1" :src="value.url" alt="">
+                    <img
+                        v-if="value.type === 1"
+                        :src="value.url"
+                        alt=""
+                        :class="{ 'loaded': imageLoadedStates[value.url] }"
+                        @load="handleImageLoad(value.url)"
+                        @error="handleImageError(value.url)"
+                        loading="lazy"
+                    />
                     <div v-if="value.type === 2" class="video-container">
                         <video :src="value.url"></video>
                         <div class="play-button">
@@ -130,6 +138,18 @@ const props = defineProps({
 })
 const UserInfo = useUserInfo()
 UserInfo.init()
+
+/* 图片加载状态管理 */
+const imageLoadedStates = ref({})
+
+const handleImageLoad = (url) => {
+    imageLoadedStates.value[url] = true
+}
+
+const handleImageError = (url) => {
+    imageLoadedStates.value[url] = true
+}
+
 /* 数字格式化 自动识别转换 K W */
 const formatNumber = (num) => {
     if (num >= 1000 && num < 1000000) {
@@ -266,6 +286,14 @@ const DelThreads = async () => {
                 height: 100%;
                 border-radius: 10px;
                 object-fit: cover;
+                filter: blur(20px);
+                transition: filter 0.6s ease-in-out;
+                opacity: 0.9;
+
+                &.loaded {
+                    filter: blur(0);
+                    opacity: 1;
+                }
             }
 
             .video-container {
