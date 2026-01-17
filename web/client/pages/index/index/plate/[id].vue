@@ -29,13 +29,13 @@
                     </div>
 
                     <!-- 按钮部分 -->
-                    <div class="ButtonSection">
+                    <!-- <div class="ButtonSection">
                         <a-button>
                             <template #icon>
                                 <icon-more />
                             </template>
                         </a-button>
-                    </div>
+                    </div> -->
                 </div>
 
             </div>

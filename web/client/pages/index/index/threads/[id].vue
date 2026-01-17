@@ -84,7 +84,7 @@
                     <a-textarea class="road" v-model="form.n_html" placeholder="请输入评论" :max-length="100" allow-clear
                         show-word-limit />
                     <div class="ButtonSection">
-                        
+
                         <a-button type="primary" class="send-btn" @click="CommentThreads()">
                             <template #icon>
                                 <icon-send />
@@ -272,8 +272,10 @@ const CommentThreads = async () => {
             Message.success('评论成功')
             form.value.n_html = ''
             GetCommentList()
+        } else if (res.code == 401) {
+            navigateTo('/login')
         } else {
-            Message.error(res.message || '评论失败')
+            Message.error(res.msg || '点赞失败')
         }
     } catch (error) {
         Message.error(error.message)
@@ -320,6 +322,8 @@ const LikeThreads = async () => {
             } else {
                 navigateTo('/threads/404')
             }
+        } else if (res.code == 401) {
+            navigateTo('/login')
         } else {
             Message.error(res.msg || '点赞失败')
         }
@@ -366,8 +370,10 @@ const reportThreads = async () => {
     if (res.code === 200) {
         reportThreadsShow.value = false
         Message.success(res.msg)
+    } else if (res.code == 401) {
+        navigateTo('/login')
     } else {
-        Message.error(res.msg)
+        Message.error(res.msg || '点赞失败')
     }
 }
 </script>
@@ -530,7 +536,7 @@ const reportThreads = async () => {
                     .send-btn {
                         border-radius: 7px;
                         background-color: rgb(0, 209, 129);
-                  
+
                     }
                 }
 

@@ -220,6 +220,7 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .PayVerifyPage {
+
     .Page {
         background-color: #fff;
         margin: 1px;

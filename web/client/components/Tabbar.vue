@@ -1,17 +1,22 @@
 <template>
 
-    <div class="Tabbar">
-        <div :class="['TabbarItem',{active: ShowIndex == '/'}]" @click="ChangePage('/')">
-            <icon-home  class="icon" />
-            <p>瓜子</p>
+    <div>
+        <div class="Tabbar">
+            <div :class="['TabbarItem', { active: ShowIndex == '/' }]" @click="ChangePage('/')">
+                <icon-home class="icon" />
+                <p>瓜子</p>
+            </div>
+            <div :class="['TabbarItem', { active: ShowIndex == '/class' }]" @click="ChangePage('/class')">
+                <icon-relation class="icon" />
+                <p>圈子</p>
+            </div>
+            <div :class="['TabbarItem', { active: ShowIndex == '/user/home' }]" @click="ChangePage('/user/home')">
+                <icon-user class="icon" />
+                <p>我的</p>
+            </div>
         </div>
-        <div :class="['TabbarItem',{active: ShowIndex == '/class'}]" @click="ChangePage('/class')">
-            <icon-relation class="icon" />
-            <p>圈子</p>
-        </div>
-        <div :class="['TabbarItem',{active: ShowIndex == '/user/home'}]" @click="ChangePage('/user/home')">
-            <icon-user  class="icon"/>
-            <p>我的</p>
+        <div class="He">
+
         </div>
     </div>
 
@@ -72,6 +77,10 @@ const ChangePage = (index) => {
         .active {
             color: #00a36d;
         }
+    }
+
+    .He {
+        height: 100px;
     }
 }
 </style>

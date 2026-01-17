@@ -2,6 +2,15 @@
     <div>
         <div class="LoginTop">
         </div>
+        <!-- 移动端标题栏 -->
+        <div class="MobileHeader">
+            <a-button type="text" class="back-btn" @click="goHome">
+                <template #icon>
+                    <icon-arrow-left />
+                </template>
+                返回首页
+            </a-button>
+        </div>
         <!-- 登录按钮 -->
         <div class="LoginBox" v-if="showIndex == 0">
             <div class="LoginTopInfo">
@@ -204,6 +213,12 @@ const startCountdown = () => {
     }, 1000)
 }
 
+const goHome = () => {
+    navigateTo('/')
+}
+
+
+
 
 </script>
 
@@ -215,8 +230,24 @@ const startCountdown = () => {
     height: 100vh;
     background-size: cover;
     background: url(/assets/bj.jpg);
+}
 
+.MobileHeader {
+    display: none;
+    position: fixed;
+    top: 10px;
+    left: 10px;
+    z-index: 1000;
+    background-color: #fff;
+    width: calc(100% - 40px);
+    padding: 10px;
+    border-radius: 30px;
 
+    .back-btn {
+        padding: 12px 16px;
+        color: #333;
+        font-size: 14px;
+    }
 }
 
 .LoginBox {
@@ -264,7 +295,20 @@ const startCountdown = () => {
         font-size: 14px;
         color: #000;
     }
+}
 
+/* 移动端适配 */
+@media (max-width: 768px) {
+    .MobileHeader {
+        display: flex;
+        align-items: center;
+    }
 
+    .LoginBox {
+        width: calc(100% - 40px);
+        padding: 30px 20px;
+        top: 70px;
+        transform: translate(-50%, 0);
+    }
 }
 </style>

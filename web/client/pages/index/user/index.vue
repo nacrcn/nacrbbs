@@ -33,7 +33,12 @@
 <script setup>
 import { Message } from '@arco-design/web-vue';
 const UserInfo = useUserInfo()
-
+UserInfo.init((res) => {
+    if (!res) {
+        Message.error('请先登录')
+        navigateTo('/login')
+    }
+})
 
 
 /* 获取活动列表 /api/getActivity */
@@ -163,8 +168,9 @@ const goPage = (path, key) => {
 
     .Content {
         width: calc(100% - 200px);
-        height: 100%;
+        height: calc(100vh - 100px);
         overflow: hidden;
+        overflow-y: auto;
     }
 
 

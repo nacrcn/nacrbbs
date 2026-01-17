@@ -9,11 +9,7 @@
         <div class="layout">
             <div class="headerBox">
                 <div class="header">
-                    <div class="menu-btn" @click="MobShow = !MobShow">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </div>
+                 
                     <img class="logo" @click="navigateTo('/')" :src="SiteConfig.$state.Config.n_web_logo" alt="">
                     <div class="NavBox">
                         <NuxtLink class="nav-link" to="/">首页</NuxtLink>
@@ -40,7 +36,7 @@
             <!-- 侧边栏 -->
             <div class="sidebar" :class="{ 'show': MobShow }">
                 <div class="sidebar-content">
-                    <img class="logo" @click="navigateTo('/')" src="/assets/logo.png" alt="">
+                    <img class="logo" @click="navigateTo('/')" :src="SiteConfig.$state.Config.n_web_logo" alt="">
                     <div class="sidebar-close" @click="MobShow = false">
                         <span></span>
                         <span></span>
@@ -59,8 +55,8 @@
                 <div class="main-content">
                     <div class="content">
                         <NuxtPage />
-                    </div>
                     <Tabbar></Tabbar>
+                    </div>
                 </div>
             </div>
         </div>

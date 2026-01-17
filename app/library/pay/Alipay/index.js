@@ -71,15 +71,11 @@ class AlipayService {
             // 初始化SDK
             await this.initSDK();
 
-            // 检查必要参数
-            if (!orderInfo.n_notify_url || !orderInfo.n_return_url) {
-                throw new Error('回调地址不能为空');
-            }
-
+          
             // 创建支付订单参数
             const payParams = {
-                notify_url: config.notify_url,
-                return_url: orderInfo.n_path ?? config.return_url,
+                notify_url: this.config.notify_url,
+                return_url: orderInfo.n_path ?? this.config.return_url,
                 biz_content: {
                     out_trade_no: orderInfo.n_no,
                     product_code: 'FAST_INSTANT_TRADE_PAY',
