@@ -1,0 +1,12 @@
+{
+    "password": "xxx",
+    "host": "202.xxx.xxx.49",
+    "port": 13669,
+    "db": 0,
+    "max_connections": 10000,
+    "max_reconnect_attempts": 10,
+    "connect_timeout": 10000,
+    "retry_delay": 100,
+    "enable_offline_queue": false,
+    "keep_alive": true
+}

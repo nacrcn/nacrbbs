@@ -1,0 +1,25 @@
+{
+  "dependencies": {
+    "@fastify/cors": "^11.0.1",
+    "@fastify/formbody": "^8.0.2",
+    "@fastify/multipart": "^9.0.3",
+    "@fastify/static": "^8.2.0",
+    "@fastify/swagger": "^9.5.1",
+    "@fastify/swagger-ui": "^5.2.3",
+    "alipay-sdk": "^4.14.0",
+    "axios": "^1.10.0",
+    "crypto": "^1.0.1",
+    "dayjs": "^1.11.13",
+    "fastify": "^5.4.0",
+    "fs-extra": "^11.3.0",
+    "install": "^0.13.0",
+    "jsonwebtoken": "^8.5.1",
+    "mime": "^4.0.7",
+    "mysql2": "^3.14.1",
+    "nodemailer": "^6.9.14",
+    "npm": "^11.5.2",
+    "redis": "^5.5.6",
+    "socket.io": "^4.8.1"
+  },
+  "type": "module"
+}

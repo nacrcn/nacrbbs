@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>图床上传</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        .ass {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #0f172a;
+            min-height: 100vh;
+            padding: 20px;
+            color: #e2e8f0;
+            height: 800px;
+            overflow-y: auto;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        h1 {
+            font-size: 32px;
+            font-weight: 600;
+            color: #ffffff;
+            letter-spacing: -0.5px;
+        }
+
+        .upload-area {
+            border: 2px dashed #475569;
+            border-radius: 12px;
+            padding: 60px 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            background: rgba(30, 41, 59, 0.5);
+            margin-bottom: 30px;
+        }
+
+        .upload-area:hover {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.1);
+        }
+
+        .upload-area.dragover {
+            border-color: #3b82f6;
+            background: rgba(59, 130, 246, 0.15);
+        }
+
+        .upload-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+            color: #64748b;
+        }
+
+        .upload-text {
+            color: #94a3b8;
+            font-size: 16px;
+        }
+
+        #fileInput {
+            display: none;
+        }
+
+        .file-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .file-item {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 16px;
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .file-thumbnail {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            object-fit: cover;
+            background: #1e293b;
+        }
+
+        .file-info {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .file-name {
+            font-size: 14px;
+            color: #f1f5f9;
+            margin-bottom: 8px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .file-meta {
+            font-size: 12px;
+            color: #64748b;
+            margin-bottom: 12px;
+        }
+
+        .progress-bar {
+            height: 4px;
+            background: #1e293b;
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #3b82f6;
+            transition: width 0.3s ease;
+        }
+
+        .file-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-width: 80px;
+        }
+
+        .status-badge {
+            font-size: 12px;
+            padding: 4px 12px;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 500;
+        }
+
+        .status-badge.pending {
+            background: #334155;
+            color: #94a3b8;
+        }
+
+        .status-badge.uploading {
+            background: rgba(59, 130, 246, 0.2);
+            color: #3b82f6;
+        }
+
+        .status-badge.success {
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+        }
+
+        .status-badge.error {
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+        }
+
+        .copy-btn {
+            padding: 6px 12px;
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: background 0.2s;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+
+        .copy-btn:hover {
+            background: #2563eb;
+        }
+
+        .copy-btn.enabled {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .result-url {
+            margin-top: 8px;
+            padding: 8px 12px;
+            background: #0f172a;
+            border-radius: 6px;
+            font-size: 11px;
+            color: #94a3b8;
+            word-break: break-all;
+            font-family: monospace;
+            cursor: pointer;
+            border: 1px solid #1e293b;
+            transition: all 0.2s;
+        }
+
+        .result-url:hover {
+            border-color: #3b82f6;
+            color: #f1f5f9;
+        }
+
+        .toast {
+            position: fixed;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%) translateY(-100px);
+            background: rgba(30, 41, 59, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 14px 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            z-index: 1000;
+            transition: transform 0.3s ease;
+            border: 1px solid #334155;
+            min-width: 280px;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        .toast.success {
+            border-color: #22c55e;
+        }
+
+        .toast.error {
+            border-color: #ef4444;
+        }
+
+        .toast-icon {
+            font-size: 18px;
+        }
+
+        .toast.success .toast-icon {
+            color: #22c55e;
+        }
+
+        .toast.error .toast-icon {
+            color: #ef4444;
+        }
+
+        .toast-message {
+            color: #f1f5f9;
+            font-size: 14px;
+        }
+
+        .clear-btn {
+            padding: 12px 24px;
+            background: #334155;
+            color: #e2e8f0;
+            border: 1px solid #475569;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 20px;
+        }
+
+        .clear-btn:hover {
+            background: #475569;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #64748b;
+        }
+
+        @media (max-width: 640px) {
+            .file-item {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .file-thumbnail {
+                width: 100%;
+                height: 200px;
+            }
+
+            .file-actions {
+                flex-direction: row;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="ass">
+        <div class="container">
+            <div class="header">
+                <h1>图床上传</h1>
+            </div>
+
+            <div class="upload-area" id="uploadArea">
+                <div class="upload-icon">+</div>
+                <div class="upload-text">点击选择或拖拽图片到此处</div>
+            </div>
+
+            <input type="file" id="fileInput" accept="image/*" multiple>
+
+            <div class="file-list" id="fileList"></div>
+        </div>
+
+        <div class="toast" id="toast">
+            <span class="toast-icon" id="toastIcon">✓</span>
+            <span class="toast-message" id="toastMessage">操作成功</span>
+        </div>
+
+        <script>
+            let key = '<KEY>';
+
+            const uploadArea = document.getElementById('uploadArea');
+            const fileInput = document.getElementById('fileInput');
+            const fileList = document.getElementById('fileList');
+            const toast = document.getElementById('toast');
+            const toastIcon = document.getElementById('toastIcon');
+            const toastMessage = document.getElementById('toastMessage');
+
+            let filesMap = new Map();
+            let toastTimeout = null;
+
+            uploadArea.addEventListener('click', () => {
+                fileInput.click();
+            });
+
+            fileInput.addEventListener('change', (e) => {
+                if (e.target.files.length > 0) {
+                    addFiles(Array.from(e.target.files));
+                }
+            });
+
+            uploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                uploadArea.classList.add('dragover');
+            });
+
+            uploadArea.addEventListener('dragleave', () => {
+                uploadArea.classList.remove('dragover');
+            });
+
+            uploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                uploadArea.classList.remove('dragover');
+
+                if (e.dataTransfer.files.length > 0) {
+                    addFiles(Array.from(e.dataTransfer.files));
+                }
+            });
+
+            function formatFileSize(bytes) {
+                if (bytes === 0) return '0 B';
+                const k = 1024;
+                const sizes = ['B', 'KB', 'MB', 'GB'];
+                const i = Math.floor(Math.log(bytes) / Math.log(k));
+                return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+            }
+
+            function addFiles(files) {
+                files.forEach(file => {
+                    if (!file.type.startsWith('image/')) {
+                        showToast(`${file.name} 不是图片文件`, 'error');
+                        return;
+                    }
+
+                    const fileId = Date.now() + Math.random().toString(36).substr(2, 9);
+
+                    const fileData = {
+                        id: fileId,
+                        file: file,
+                        status: 'pending',
+                        progress: 0,
+                        url: ''
+                    };
+
+                    filesMap.set(fileId, fileData);
+                    renderFileItem(fileData);
+
+                    setTimeout(() => {
+                        uploadFile(fileId);
+                    }, 100);
+                });
+            }
+
+            function renderFileItem(fileData) {
+                const item = document.createElement('div');
+                item.className = 'file-item';
+                item.id = `file-${fileData.id}`;
+
+                const reader = new FileReader();
+                reader.onload = (e) => {
+                    const thumbnail = item.querySelector('.file-thumbnail');
+                    thumbnail.src = e.target.result;
+                };
+                reader.readAsDataURL(fileData.file);
+
+                item.innerHTML = `
+                <img class="file-thumbnail" src="" alt="">
+                <div class="file-info">
+                    <div class="file-name">${fileData.file.name}</div>
+                    <div class="file-meta">${formatFileSize(fileData.file.size)}</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="file-actions">
+                    <div class="status-badge ${fileData.status}" id="status-${fileData.id}">等待中</div>
+                    <button class="copy-btn" id="copy-${fileData.id}">复制链接</button>
+                    <div class="result-url" id="url-${fileData.id}" style="display:none"></div>
+                </div>
+            `;
+
+                fileList.appendChild(item);
+            }
+
+            function updateFileStatus(fileId, status, progress = 0) {
+                const fileData = filesMap.get(fileId);
+                if (!fileData) return;
+
+                fileData.status = status;
+                fileData.progress = progress;
+
+                const statusBadge = document.getElementById(`status-${fileId}`);
+                const progressFill = document.querySelector(`#file-${fileId} .progress-fill`);
+                const copyBtn = document.getElementById(`copy-${fileId}`);
+                const urlDiv = document.getElementById(`url-${fileId}`);
+
+                if (statusBadge) {
+                    const statusMap = {
+                        'pending': '等待中',
+                        'uploading': '上传中',
+                        'success': '成功',
+                        'error': '失败'
+                    };
+                    statusBadge.textContent = statusMap[status];
+                    statusBadge.className = `status-badge ${status}`;
+                }
+
+                if (progressFill) {
+                    progressFill.style.width = progress + '%';
+                }
+
+                if (status === 'success' && copyBtn) {
+                    copyBtn.classList.add('enabled');
+                }
+
+                if (status === 'success' && urlDiv && fileData.url) {
+                    urlDiv.textContent = fileData.url;
+                    urlDiv.style.display = 'block';
+                }
+            }
+
+            function uploadFile(fileId) {
+                const fileData = filesMap.get(fileId);
+                if (!fileData) return;
+
+                updateFileStatus(fileId, 'uploading', 0);
+
+                const formData = new FormData();
+                formData.append('file', fileData.file);
+
+                const xhr = new XMLHttpRequest();
+
+                xhr.upload.addEventListener('progress', (e) => {
+                    if (e.lengthComputable) {
+                        const percent = Math.round((e.loaded / e.total) * 100);
+                        updateFileStatus(fileId, 'uploading', percent);
+                    }
+                });
+
+                xhr.addEventListener('load', () => {
+                    try {
+                        const data = JSON.parse(xhr.responseText);
+
+                        if (data.code === 200) {
+                            fileData.url = data.data.url;
+                            updateFileStatus(fileId, 'success', 100);
+                            showToast(`${fileData.file.name} 上传成功`);
+                        } else {
+                            updateFileStatus(fileId, 'error', 0);
+                            showToast(`${fileData.file.name} 上传失败：${data.msg}`, 'error');
+                        }
+                    } catch (error) {
+                        updateFileStatus(fileId, 'error', 0);
+                        showToast(`${fileData.file.name} 上传失败`, 'error');
+                    }
+                });
+
+                xhr.addEventListener('error', () => {
+                    updateFileStatus(fileId, 'error', 0);
+                    showToast(`${fileData.file.name} 网络错误`, 'error');
+                });
+
+                xhr.open('POST', `http://127.0.0.1:9999/napi/image?key=${key}`);
+                xhr.send(formData);
+            }
+
+            document.addEventListener('click', (e) => {
+                if (e.target.id && e.target.id.startsWith('copy-')) {
+                    const fileId = e.target.id.replace('copy-', '');
+                    const fileData = filesMap.get(fileId);
+
+                    if (fileData && fileData.url) {
+                        copyToClipboard(fileData.url);
+                    }
+                }
+
+                if (e.target.classList.contains('result-url')) {
+                    copyToClipboard(e.target.textContent);
+                }
+            });
+
+            function copyToClipboard(text) {
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(text).then(() => {
+                        showToast('链接已复制到剪贴板');
+                    }).catch(() => {
+                        fallbackCopy(text);
+                    });
+                } else {
+                    fallbackCopy(text);
+                }
+            }
+
+            function fallbackCopy(text) {
+                const textarea = document.createElement('textarea');
+                textarea.value = text;
+                textarea.style.position = 'fixed';
+                textarea.style.opacity = '0';
+                document.body.appendChild(textarea);
+                textarea.select();
+                
+                try {
+                    document.execCommand('copy');
+                    showToast('链接已复制到剪贴板');
+                } catch (err) {
+                    showToast('复制失败，请手动复制', 'error');
+                }
+                
+                document.body.removeChild(textarea);
+            }
+
+            function showToast(message, type = 'success') {
+                toastIcon.textContent = type === 'success' ? '✓' : '✕';
+                toastMessage.textContent = message;
+                toast.className = `toast ${type}`;
+                toast.classList.add('show');
+
+                if (toastTimeout) {
+                    clearTimeout(toastTimeout);
+                }
+
+                toastTimeout = setTimeout(() => {
+                    toast.classList.remove('show');
+                }, 3000);
+            }
+        </script>
+    </div>
+</body>
+
+</html>

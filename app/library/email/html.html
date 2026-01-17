@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>{{title}}</title>
+    <style type="text/css">
+        /* 重置样式 */
+        body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+        table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+        img { -ms-interpolation-mode: bicubic; border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; }
+        body { height: 100% !important; margin: 0 !important; padding: 0 !important; width: 100% !important; }
+    </style>
+</head>
+<body style="margin: 0 !important; padding: 0 !important; background-color: #f4f7fa; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;">
+
+    <!-- 预览文本 -->
+    <div style="display: none; font-size: 1px; color: #fefefe; line-height: 1px; font-family: Arial, sans-serif; max-height: 0px; max-width: 0px; opacity: 0; overflow: hidden;">
+        {{preview_text}}
+    </div>
+
+    <!-- 主容器 -->
+    <table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color: #f4f7fa; padding: 20px 0;">
+        <tr>
+            <td align="center" style="padding: 20px 0;">
+                <table border="0" cellpadding="0" cellspacing="0" width="600" style="max-width: 600px; background-color: #ffffff; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.08); overflow: hidden;">
+                    
+                    <!-- 头部区域 -->
+                    <tr>
+                        <td style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 40px 30px; text-align: center;">
+                            <!-- 标题 -->
+                            <h1 style="color: #ffffff; font-size: 28px; font-weight: 700; margin: 0; text-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                                {{main_title}}
+                            </h1>
+                            <!-- 副标题 -->
+                            <p style="color: rgba(255,255,255,0.9); font-size: 16px; margin: 10px 0 0 0; font-weight: 400;">
+                                {{subtitle}}
+                            </p>
+                        </td>
+                    </tr>
+
+                    <!-- 内容区域 -->
+                    <tr>
+                        <td style="padding: 40px 30px; background-color: #ffffff;">
+                            
+                            <!-- 欢迎信息 -->
+                            <div style="margin-bottom: 30px;">
+                                <p style="color: #2c3e50; font-size: 18px; line-height: 1.6; margin: 0 0 20px 0;">
+                                    尊敬的 <span style="color: #667eea; font-weight: 600;">{{user_name}}</span>，
+                                </p>
+                                <p style="color: #5a6c7d; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">
+                                    {{greeting_message}}
+                                </p>
+                            </div>
+
+                            <!-- 主要内容 -->
+                            <div style="background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%); padding: 30px; border-radius: 10px; margin-bottom: 30px; border-left: 4px solid #667eea;">
+                                {{main_content}}
+                            </div>
+
+                            <!-- 重要信息卡片 -->
+                            <div style="background-color: #fff3cd; border: 1px solid #ffeaa7; border-radius: 8px; padding: 20px; margin-bottom: 30px;">
+                                <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                    <tr>
+                                        <td width="30" valign="top">
+                                            <span style="font-size: 20px;">⚠️</span>
+                                        </td>
+                                        <td>
+                                            <h3 style="color: #856404; font-size: 16px; font-weight: 600; margin: 0 0 10px 0;">
+                                                重要提示
+                                            </h3>
+                                            <p style="color: #856404; font-size: 14px; line-height: 1.5; margin: 0;">
+                                                {{important_info}}
+                                            </p>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                            <div style="text-align: center; margin-bottom: 30px;">
+                                <a href="{{button_url}}" style="display: inline-block; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #ffffff; font-size: 16px; font-weight: 600; text-decoration: none; padding: 15px 35px; border-radius: 50px; box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3); transition: all 0.3s ease;">
+                                    {{button_text}}
+                                </a>
+                                <p style="color: #8898aa; font-size: 12px; margin: 15px 0 0 0;">
+                                    如果按钮无法点击，请复制以下链接到浏览器：<br>
+                                    <span style="word-break: break-all; background-color: #f8f9fa; padding: 8px 12px; border-radius: 4px; display: inline-block; margin-top: 8px; font-family: 'Courier New', monospace;">
+                                        {{button_url}}
+                                    </span>
+                                </p>
+                            </div>
+
+                            <!-- 详细信息列表 -->
+                            <div style="margin-bottom: 30px;">
+                                <h3 style="color: #2c3e50; font-size: 18px; font-weight: 600; margin: 0 0 20px 0; padding-bottom: 10px; border-bottom: 2px solid #e9ecef;">
+                                    详细信息
+                                </h3>
+                                {{details_list}}
+                            </div>
+
+                            <!-- 安全提醒 -->
+                            <div style="background-color: #f8f9fa; border-radius: 8px; padding: 20px; margin-bottom: 30px;">
+                                <table border="0" cellpadding="0" cellspacing="0" width="100%">
+                                    <tr>
+                                        <td width="30" valign="top">
+                                            <span style="font-size: 20px;">🔒</span>
+                                        </td>
+                                        <td>
+                                            <h4 style="color: #495057; font-size: 14px; font-weight: 600; margin: 0 0 8px 0;">
+                                                安全提醒
+                                            </h4>
+                                            <ul style="color: #6c757d; font-size: 13px; line-height: 1.5; margin: 0; padding-left: 20px;">
+                                                <li style="margin-bottom: 5px;">请勿将此邮件或相关链接分享给他人</li>
+                                                <li style="margin-bottom: 5px;">我们绝不会通过邮件要求您提供密码或敏感信息</li>
+                                                <li>如有疑问，请及时联系我们的客服团队</li>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+
+                        </td>
+                    </tr>
+
+
+                    <!-- 底部区域 -->
+                    <tr>
+                        <td style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 30px; text-align: center;">
+                          
+                            <!-- 版权信息 -->
+                            <div style="border-top: 1px solid rgba(255,255,255,0.2); padding-top: 20px;">
+                                <p style="color: rgba(255,255,255,0.7); font-size: 11px; margin: 0 0 10px 0;">
+                                    © {{current_year}} {{company_name}}. 保留所有权利。
+                                </p>
+                            </div>
+                        </td>
+                    </tr>
+
+                </table>
+            </td>
+        </tr>
+    </table>
+
+    <!-- 底部提示 -->
+    <table border="0" cellpadding="0" cellspacing="0" width="100%">
+        <tr>
+            <td align="center" style="padding: 20px;">
+                <p style="color: #8898aa; font-size: 12px; margin: 0; text-align: center;">
+                    此邮件由系统自动发送，请勿回复。如有疑问，请联系 <a href="mailto:{{support_email}}" style="color: #667eea; text-decoration: underline;">{{support_email}}</a>
+                </p>
+            </td>
+        </tr>
+    </table>
+
+</body>
+</html>

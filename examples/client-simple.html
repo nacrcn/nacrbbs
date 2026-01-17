@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket 客户端</title>
+    <script src="https://cdn.socket.io/4.7.4/socket.io.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        .container {
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+
+        .status.success { background: #d4edda; color: #155724; }
+        .status.error { background: #f8d7da; color: #721c24; }
+        .status.warning { background: #fff3cd; color: #856404; }
+        .status.info { background: #d1ecf1; color: #0c5460; }
+
+        .controls {
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        .input-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+
+        .input-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr auto;
+            gap: 10px;
+            align-items: end;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background 0.3s;
+        }
+
+        .btn.primary { background: #667eea; color: white; }
+        .btn.primary:hover { background: #5a67d8; }
+        .btn.success { background: #28a745; color: white; }
+        .btn.success:hover { background: #218838; }
+        .btn.danger { background: #dc3545; color: white; }
+        .btn.danger:hover { background: #c82333; }
+        .btn:disabled { background: #ccc; cursor: not-allowed; }
+
+        .messages {
+            height: 400px;
+            overflow-y: auto;
+            padding: 20px;
+            background: #fafafa;
+        }
+
+        .message {
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 10px;
+            max-width: 80%;
+        }
+
+        .message.system {
+            background: #e3f2fd;
+            text-align: center;
+            margin: 0 auto 15px;
+            max-width: 60%;
+        }
+
+        .message.user-joined {
+            background: #e8f5e8;
+            text-align: center;
+            margin: 0 auto 15px;
+            max-width: 60%;
+        }
+
+        .message.user-left {
+            background: #fff3e0;
+            text-align: center;
+            margin: 0 auto 15px;
+            max-width: 60%;
+        }
+
+        .message.chat {
+            background: white;
+            border: 1px solid #e0e0e0;
+        }
+
+        .message.own {
+            background: #667eea;
+            color: white;
+            margin-left: auto;
+        }
+
+        .message.error {
+            background: #ffebee;
+            color: #c62828;
+            text-align: center;
+            margin: 0 auto 15px;
+            max-width: 60%;
+        }
+
+        .message-header {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        .message-time {
+            font-size: 12px;
+            opacity: 0.7;
+            margin-top: 5px;
+        }
+
+        .message-input {
+            padding: 15px;
+            background: white;
+            border-top: 1px solid #eee;
+        }
+
+        .message-input .input-row {
+            grid-template-columns: 1fr auto;
+        }
+
+        .message-input input {
+            padding: 12px;
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+            .input-row {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            
+            .btn {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 WebSocket 房间聊天室</h1>
+            <div class="status info" id="status">未连接</div>
+            <div id="onlineCount" style="margin-top: 10px; font-size: 14px;"></div>
+        </div>
+
+        <div class="controls">
+            <div class="input-group">
+                <label>服务器连接</label>
+                <div style="display: flex; gap: 10px;">
+                    <button class="btn success" id="connectBtn">连接服务器</button>
+                    <button class="btn danger" id="disconnectBtn" disabled>断开连接</button>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>房间设置</label>
+                <div class="input-row">
+                    <div>
+                        <label for="username">用户名</label>
+                        <input type="text" id="username" placeholder="输入用户名" value="访客">
+                    </div>
+                    <div>
+                        <label for="room">房间名</label>
+                        <input type="text" id="room" placeholder="输入房间名" value="general">
+                    </div>
+                    <div>
+                        <label for="password">密码(可选)</label>
+                        <input type="password" id="password" placeholder="房间密码">
+                    </div>
+                    <button class="btn primary" id="joinRoomBtn" disabled>加入房间</button>
+                </div>
+                <div style="margin-top: 10px;">
+                    <button class="btn danger" id="leaveRoomBtn" disabled>离开房间</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="messages" id="messages">
+            <div class="message system">
+                <div class="message-content">欢迎使用 WebSocket 聊天室！</div>
+                <div class="message-time">系统消息</div>
+            </div>
+        </div>
+
+        <div class="message-input">
+            <div class="input-row">
+                <input type="text" id="message" placeholder="输入消息..." disabled>
+                <button class="btn primary" id="sendBtn" disabled>发送</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="websocket-client.js"></script>
+</body>
+</html>

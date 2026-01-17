@@ -1,0 +1,1 @@
+import{b9 as n,l as i}from"./CbujNTzC.js";const c=n((o,r)=>{const e=navigator.userAgent;if(!e)return;const t=/Android|iPhone|Windows Phone/i.test(e),a=/iPad/i.test(e)||navigator.platform==="MacIntel"&&navigator.maxTouchPoints>1;if(console.log(t),t&&o.path!=="/")return i("/");if(!t&&!a&&o.path!=="/pc")return i("/pc")});export{c as default};
