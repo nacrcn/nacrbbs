@@ -42,7 +42,7 @@ const updatefun = (file, url, onProgress) => {
 
 export const upimg = async (file, onProgress) => {
     console.log(file);
-    const res = await updatefun(file, 'http://127.0.0.1:9999/api/upload/image', (percent) => {
+    const res = await updatefun(file, 'https://api.bbs.nacr.cn/api/upload/image', (percent) => {
         console.log(percent);
         onProgress(percent)
     })
@@ -52,7 +52,7 @@ export const upimg = async (file, onProgress) => {
 }
 
 export const upfile = async (file, onProgress) => {
-    const res = await updatefun(file, 'http://127.0.0.1:9999/api/upload/file', (percent) => {
+    const res = await updatefun(file, 'https://api.bbs.nacr.cn/api/upload/file', (percent) => {
         console.log(percent);
         onProgress(percent)
     })
