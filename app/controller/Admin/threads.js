@@ -96,10 +96,11 @@ export default {
     }),
     /* 删除帖子 */
     DeleteThread: (request, reply) => global.Fun(reply, async () => {
-        const id = request.body.id;
+
+        const pre = request.body;
         await global.db.delete('n_tclist', 'n_tid = ?', [pre.id])
         /* 删除评论 */
-        await global.db.delete('n_comments', 'n_tid = ?', [pre.id]);
+        await global.db.delete('n_comment', 'n_tid = ?', [pre.id]);
         await global.db.delete('n_threads', 'id = ? ', [pre.id]);
         global.sendMsg(reply, 200, '删除成功');
     }),
