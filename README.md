@@ -17,7 +17,10 @@
 
 如果这个项目对你有帮助，请给个 ⭐️ Star 支持一下！
 
-- 项目地址：[https://gitee.com/wuaxcn/nacrbbs](https://gitee.com/wuaxcn/nacrbbs)
+
+- gitee项目地址：[https://gitee.com/wuaxcn/nacrbbs](https://gitee.com/wuaxcn/nacrbbs)
+- github项目地址：[https://github.com/nacrcn/nacrbbs](https://github.com/nacrcn/nacrbbs)
+
 - 问题反馈：[Issues](https://gitee.com/wuaxcn/nacrbbs/issues)
 - QQ：21089086
 - 微信：rsrx9595
@@ -200,7 +203,7 @@ npm run dev
 
 前台访问：`http://localhost:3001`  
 后台访问：`http://localhost:3002`  
-默认后台账号：`admin` / 密码：`admin123`
+默认后台账号：`admin` / 密码：`123456`
 
 ---
 

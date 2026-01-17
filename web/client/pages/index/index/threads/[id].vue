@@ -770,10 +770,8 @@ const reportThreads = async () => {
 
                     .send-btn {
                         border-radius: 7px;
-                        margin-left: 10px;
                         background-color: rgb(0, 209, 129);
-                        position: absolute;
-                        right: 0px;
+                      
 
                     }
                 }
