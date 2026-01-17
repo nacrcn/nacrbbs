@@ -194,7 +194,6 @@ const GetThreads = async () => {
             ThreadsList.value = res.data
             from.value.total = res.total
         } else {
-            Message.error(res.message || '获取文章列表失败')
         }
     } catch (error) {
         Message.error(error.message)
@@ -216,7 +215,6 @@ const GetCommentList = async () => {
             CommentList.value = res.data
             GetCommentsFrom.value.total = res.total
         } else {
-            Message.error(res.message || '获取评论列表失败')
         }
     } catch (error) {
         Message.error(error.message)
