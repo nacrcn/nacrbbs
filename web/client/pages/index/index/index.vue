@@ -12,7 +12,7 @@
                             <icon-search />
                         </template>
                     </a-input>
-                    <a-button type="primary" class="send-btn" @click="navigateTo('/add')">
+                    <a-button type="primary" class="send-btn" @click="navigateTo('/threadInfo/add')">
                         <template #icon>
                             <icon-send />
                         </template>
@@ -33,25 +33,29 @@
                             value: 'n_starts',
                             name: '点赞最多'
                         },
-                         {
+                        {
                             value: 'n_read',
                             name: '阅读最多'
                         },
                     ]" v-model:modelValue="from.sort" @change="GetThreads"></NavBox>
                 </div>
             </div>
-            <div class="content-box">
-                <ItemA v-for="value in ThreadsList" :key="value.id" :data="value"></ItemA>
-            </div>
-            <div class="Isno" style="  width: 100%;
+            <a-spin :loading="loading" tip="正在加载" style="width: 100%;min-height: 300px;">
+                <div class="content-box">
+                    <ItemA v-for="value in ThreadsList" :key="value.id" :data="value"></ItemA>
+                </div>
+
+                <div class="Isno" style="  width: 100%;
                 background-color: #fff;
-                border-radius: 10px;" v-if="ThreadsList.length == 0">
-                <a-result :status="null" title="无内容" subtitle="哎呀，没有内容了">
-                    <template #icon>
-                        <IconFaceSmileFill />
-                    </template>
-                </a-result>
-            </div>
+                border-radius: 10px;" v-if="ThreadsList.length == 0 && !loading">
+                    <a-result :status="null" title="无内容" subtitle="哎呀，没有内容了">
+                        <template #icon>
+                            <IconFaceSmileFill />
+                        </template>
+                    </a-result>
+                </div>
+            </a-spin>
+
             <div class="PageNav">
                 <a-pagination @change="GetThreads" @page-size-change="GetThreads" v-model:current="from.page"
                     v-model:pageSize="from.pagesize" :total="from.total" size="mini" show-total />
@@ -122,8 +126,11 @@ const from = ref({
     search: '',
     sort: 'id'
 })
+const loading = ref(false)
+
 const GetThreads = async () => {
     try {
+        loading.value = true
         const res = await useApiFetch().post('/api/GetThreads', from.value)
         if (res.code == 200) {
             ThreadsList.value = res.data
@@ -131,6 +138,7 @@ const GetThreads = async () => {
         } else {
             Message.error(res.message || '获取文章列表失败')
         }
+        loading.value = false
     } catch (error) {
         Message.error(error.message)
     }
@@ -265,7 +273,7 @@ onMounted(() => {
         .MainContent {
             width: calc(100%);
 
-          .TopB {
+            .TopB {
                 width: calc(100% - 20px);
                 padding: 10px;
                 background-color: #fff;

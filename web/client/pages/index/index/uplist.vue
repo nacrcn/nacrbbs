@@ -20,7 +20,8 @@
                     </a-button>
                 </div>
             </div>
-            <div class="content-box">
+               <a-spin :loading="loading" tip="正在加载" style="width: 100%;min-height: 300px;">
+<div class="content-box">
                 <UserBox v-for="value in ThreadsList" :key="value.id" :info="value"></UserBox>
             </div>
             <div class="Isno" style="  width: 100%;
@@ -32,6 +33,8 @@
                     </template>
                 </a-result>
             </div>
+               </a-spin>
+            
             <div class="PageNav">
                 <a-pagination @change="GetThreads" @page-size-change="GetThreads" v-model:current="from.page"
                     v-model:pageSize="from.pagesize" :total="from.total" size="mini" show-total />
@@ -101,8 +104,10 @@ const from = ref({
     total: 0,
     search: ''
 })
+const loading = ref(false)
 const GetThreads = async () => {
     try {
+        loading.value = true
     
         const res = await useApiFetch().post('/api/GetUser', from.value)
         if (res.code == 200) {
@@ -111,6 +116,7 @@ const GetThreads = async () => {
         } else {
             Message.error(res.message || '获取文章列表失败')
         }
+        loading.value = false
     } catch (error) {
         Message.error(error.message)
     }

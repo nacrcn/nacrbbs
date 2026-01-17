@@ -116,8 +116,19 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-    <div>
+    <div class="sa">
         <div ref="toolbarRef" style="border-bottom: 1px solid #ccc;" />
         <div ref="editorRef" :style="`min-height: ${height}px; padding: 10px;`" />
     </div>
 </template>
+
+<style>
+    .sa{
+        z-index: 289882;
+        background-color: #fff;
+        max-width: 1280px;
+        left: 50%;
+        top: 80px;
+        /* s */
+    }
+</style>

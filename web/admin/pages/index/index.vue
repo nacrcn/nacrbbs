@@ -1,5 +1,32 @@
 <template>
     <div class="dashboard-container">
+        <!-- 项目信息卡片 -->
+        <div class="project-info-banner">
+            <div class="project-info-content">
+                <div class="project-title">
+                    <icon-github class="github-icon" />
+                    <span>NacrBBS 开源项目</span>
+                </div>
+                <div class="project-desc">
+                    开源轻量级论坛系统,欢迎 Star 支持
+                </div>
+            </div>
+            <div class="project-links">
+                <a-button type="outline" size="small" @click="openGitee">
+                    <template #icon>
+                        <icon-github />
+                    </template>
+                    Gitee
+                </a-button>
+                <a-button type="outline" size="small" @click="openGithub">
+                    <template #icon>
+                        <icon-github />
+                    </template>
+                    GitHub
+                </a-button>
+            </div>
+        </div>
+
         <!-- 页面标题 -->
         <div class="page-header">
             <div>
@@ -30,7 +57,8 @@
                             <div class="card-value">
                                 {{ WebInfo.total?.users || 0 }}
                             </div>
-                            <div class="card-trend" :class="{ 'up': getTrend(WebInfo.total?.users, WebInfo.today?.register, WebInfo.yesterday?.register) >= 0, 'down': getTrend(WebInfo.total?.users, WebInfo.today?.register, WebInfo.yesterday?.register) < 0 }">
+                            <div class="card-trend"
+                                :class="{ 'up': getTrend(WebInfo.total?.users, WebInfo.today?.register, WebInfo.yesterday?.register) >= 0, 'down': getTrend(WebInfo.total?.users, WebInfo.today?.register, WebInfo.yesterday?.register) < 0 }">
                                 今日新增 <span>{{ WebInfo.today?.register || 0 }}</span>
                                 <template v-if="WebInfo.yesterday?.register !== undefined">
                                     <icon-arrow-up v-if="WebInfo.today?.register >= WebInfo.yesterday?.register" />
@@ -53,7 +81,8 @@
                             <div class="card-value">
                                 {{ WebInfo.total?.threads || 0 }}
                             </div>
-                            <div class="card-trend" :class="{ 'up': WebInfo.today?.threads >= WebInfo.yesterday?.threads, 'down': WebInfo.today?.threads < WebInfo.yesterday?.threads }">
+                            <div class="card-trend"
+                                :class="{ 'up': WebInfo.today?.threads >= WebInfo.yesterday?.threads, 'down': WebInfo.today?.threads < WebInfo.yesterday?.threads }">
                                 今日新增 <span>{{ WebInfo.today?.threads || 0 }}</span>
                                 <template v-if="WebInfo.yesterday?.threads !== undefined">
                                     <icon-arrow-up v-if="WebInfo.today?.threads >= WebInfo.yesterday?.threads" />
@@ -76,7 +105,8 @@
                             <div class="card-value">
                                 {{ WebInfo.total?.comments || 0 }}
                             </div>
-                            <div class="card-trend" :class="{ 'up': WebInfo.today?.comments >= WebInfo.yesterday?.comments, 'down': WebInfo.today?.comments < WebInfo.yesterday?.comments }">
+                            <div class="card-trend"
+                                :class="{ 'up': WebInfo.today?.comments >= WebInfo.yesterday?.comments, 'down': WebInfo.today?.comments < WebInfo.yesterday?.comments }">
                                 今日新增 <span>{{ WebInfo.today?.comments || 0 }}</span>
                                 <template v-if="WebInfo.yesterday?.comments !== undefined">
                                     <icon-arrow-up v-if="WebInfo.today?.comments >= WebInfo.yesterday?.comments" />
@@ -99,12 +129,14 @@
                             <div class="card-value">
                                 ¥{{ WebInfo.today?.revenue?.toFixed(2) || '0.00' }}
                             </div>
-                            <div class="card-trend" :class="{ 'up': WebInfo.today?.revenue >= WebInfo.yesterday?.revenue, 'down': WebInfo.today?.revenue < WebInfo.yesterday?.revenue }">
+                            <div class="card-trend"
+                                :class="{ 'up': WebInfo.today?.revenue >= WebInfo.yesterday?.revenue, 'down': WebInfo.today?.revenue < WebInfo.yesterday?.revenue }">
                                 昨日流水 <span>¥{{ WebInfo.yesterday?.revenue?.toFixed(2) || '0.00' }}</span>
                                 <template v-if="WebInfo.yesterday?.revenue !== undefined">
                                     <icon-arrow-up v-if="WebInfo.today?.revenue >= WebInfo.yesterday?.revenue" />
                                     <icon-arrow-down v-else />
-                                    <span>¥{{ Math.abs(WebInfo.today?.revenue - WebInfo.yesterday?.revenue).toFixed(2) }}</span>
+                                    <span>¥{{ Math.abs(WebInfo.today?.revenue - WebInfo.yesterday?.revenue).toFixed(2)
+                                        }}</span>
                                 </template>
                             </div>
                         </div>
@@ -334,6 +366,16 @@ const handleRefresh = async () => {
     Message.success('数据已刷新')
 }
 
+/* 打开 Gitee */
+const openGitee = () => {
+    window.open('https://gitee.com/wuaxcn/nacrbbs', '_blank')
+}
+
+/* 打开 GitHub */
+const openGithub = () => {
+    window.open('https://github.com/nacrcn/nacrbbs', '_blank')
+}
+
 /* 切换天数 */
 const handleDaysChange = (value) => {
     chartDays.value = value
@@ -360,7 +402,68 @@ onBeforeUnmount(() => {
 .dashboard-container {
     padding: 24px;
     background-color: #f7f7f8;
-    min-height: 100vh;
+    overflow-y: auto;
+
+    .project-info-banner {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        border-radius: 12px;
+        padding: 20px 24px;
+        margin-bottom: 24px;
+        box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 16px;
+
+        .project-info-content {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+
+            .project-title {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                font-size: 20px;
+                font-weight: 700;
+                color: white;
+
+                .github-icon {
+                    font-size: 24px;
+                }
+            }
+
+            .project-desc {
+                font-size: 14px;
+                color: rgba(255, 255, 255, 0.85);
+            }
+        }
+
+        .project-links {
+            display: flex;
+            gap: 12px;
+
+            :deep(.arco-btn) {
+                background: rgba(255, 255, 255, 0.15);
+                border-color: rgba(255, 255, 255, 0.3);
+                color: white;
+                backdrop-filter: blur(10px);
+                transition: all 0.3s ease;
+
+                &:hover {
+                    background: rgba(255, 255, 255, 0.25);
+                    border-color: rgba(255, 255, 255, 0.5);
+                    transform: translateY(-2px);
+                    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+                }
+
+                .arco-btn-icon {
+                    color: white;
+                }
+            }
+        }
+    }
 
     .page-header {
         background: white;
@@ -510,6 +613,22 @@ onBeforeUnmount(() => {
 @media (max-width: 768px) {
     .dashboard-container {
         padding: 16px;
+    height: calc(100vh - 150px);
+
+        .project-info-banner {
+            padding: 16px 20px;
+            flex-direction: column;
+            align-items: flex-start;
+
+            .project-links {
+                width: 100%;
+                justify-content: center;
+
+                :deep(.arco-btn) {
+                    flex: 1;
+                }
+            }
+        }
 
         .page-header {
             padding: 20px;
@@ -519,6 +638,7 @@ onBeforeUnmount(() => {
 
             .header-actions {
                 width: 100%;
+
                 :deep(.arco-btn) {
                     width: 100%;
                 }

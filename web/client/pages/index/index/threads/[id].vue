@@ -99,18 +99,22 @@
                     <img src="/assets/1.png" alt="">
                     <span>大家都再说</span>
                 </div>
-                <CommentItem v-for="value in CommentList" :key="value.id" :data="value"
-                    :isAuthor="value.n_uid == Info.n_uid" @reload="GetCommentList"></CommentItem>
+                <a-spin :loading="loading" tip="正在加载" style="width: 100%;height: 100%;">
 
-                <div class="Isno" style="  width: 100%;
+                    <CommentItem v-for="value in CommentList" :key="value.id" :data="value"
+                        :isAuthor="value.n_uid == Info.n_uid" @reload="GetCommentList"></CommentItem>
+
+                    <div class="Isno" style="  width: 100%;
                 background-color: #fff;
-                border-radius: 10px;" v-if="CommentList.length == 0">
-                    <a-result :status="null" title="无内容" subtitle="哎呀，没有内容了">
-                        <template #icon>
-                            <IconFaceSmileFill />
-                        </template>
-                    </a-result>
-                </div>
+                border-radius: 10px;" v-if="CommentList.length == 0 && !loading">
+                        <a-result :status="null" title="无内容" subtitle="哎呀，没有内容了">
+                            <template #icon>
+                                <IconFaceSmileFill />
+                            </template>
+                        </a-result>
+                    </div>
+                </a-spin>
+
                 <div class="PageNav">
                     <a-pagination @change="GetCommentList" @page-size-change="GetCommentList"
                         v-model:current="GetCommentsFrom.page" v-model:pageSize="GetCommentsFrom.pagesize"
@@ -291,12 +295,14 @@ const GetCommentsFrom = ref({
 const CommentList = ref([])
 const GetCommentList = async () => {
     try {
+        loading.value = true
         const res = await useApiFetch().post('/api/GetComments', GetCommentsFrom.value)
         if (res.code == 200) {
             CommentList.value = res.data
             GetCommentsFrom.value.total = res.total
         } else {
         }
+        loading.value = false
     } catch (error) {
         Message.error(error.message)
     }
@@ -771,7 +777,7 @@ const reportThreads = async () => {
                     .send-btn {
                         border-radius: 7px;
                         background-color: rgb(0, 209, 129);
-                      
+
 
                     }
                 }

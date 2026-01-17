@@ -290,6 +290,24 @@ if (id == 'add') {
                 margin: 0px auto;
 
             }
+            .RightBox {
+                 width: calc(100% - 40px);
+                padding: 15px;
+                border-radius: 20px;
+                margin: 10px auto;
+                background-color: #fff;
+                .Items {
+                    padding: 15px;
+                    border-radius: 10px;
+                    background-color: #fff;
+
+                    .road {
+                        border-radius: 10px !important;
+                        width: 100%;
+                    }
+                }
+
+            }
         }
 
 

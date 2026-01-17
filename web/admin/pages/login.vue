@@ -25,6 +25,23 @@
                 </a-form-item>
             </a-form>
 
+            <!-- 项目信息 -->
+            <div class="project-info">
+                <div class="project-title">
+                    <span>NacrBBS</span>
+                </div>
+                <div class="project-desc">
+                    开源轻量级论坛系统
+                </div>
+                <div class="project-links">
+                    <a-button type="text" size="small" @click="openGitee">Gitee</a-button>
+                    <span class="divider">|</span>
+                    <a-button type="text" size="small" @click="openGithub">GitHub</a-button>
+                    <span class="divider">|</span>
+                    <span class="star-text">⭐ 欢迎 Star</span>
+                </div>
+            </div>
+
         </div>
     </div>
 </template>
@@ -48,6 +65,19 @@ const login = async () => {
         Message.error(res.msg)
     }
 }
+
+/* 打开 Gitee */
+const openGitee = () => {
+    window.open('https://gitee.com/wuaxcn/nacrbbs', '_blank')
+}
+
+/* 打开 GitHub */
+const openGithub = () => {
+    window.open('https://github.com/nacrcn/nacrbbs', '_blank')
+}
+
+
+
 
 
 
@@ -109,6 +139,58 @@ const login = async () => {
         padding: 0 10px;
         font-size: 14px;
         color: #000;
+    }
+
+    .project-info {
+        margin-top: 30px;
+        padding-top: 20px;
+        border-top: 1px solid #f0f0f0;
+        text-align: center;
+
+        .project-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 6px;
+        }
+
+        .project-desc {
+            font-size: 13px;
+            color: #6b7280;
+            margin-bottom: 12px;
+        }
+
+        .project-links {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+
+            :deep(.arco-btn) {
+                color: #667eea;
+                padding: 0 4px;
+                height: auto;
+                font-size: 13px;
+                font-weight: 500;
+                transition: all 0.3s ease;
+
+                &:hover {
+                    color: #764ba2;
+                    background: rgba(102, 126, 234, 0.1);
+                }
+            }
+
+            .divider {
+                color: #d0d7de;
+                font-size: 14px;
+            }
+
+            .star-text {
+                font-size: 13px;
+                color: #6b7280;
+                font-weight: 500;
+            }
+        }
     }
 
 
