@@ -16,6 +16,7 @@
             <iframe src="https://ghbtns.com/github-btn.html?user=nacrcn&repo=nacrbbs&type=star&count=true"
                 frameborder="0" scrolling="0" width="120" height="20" title="GitHub Star" class="github-btn">
             </iframe>
+            <a href='https://gitee.com/wuaxcn/nacrbbs/stargazers'><img src='https://gitee.com/wuaxcn/nacrbbs/badge/star.svg?theme=dark' alt='star'></img></a>
         </div>
 
         <div class="link-wrapper">

@@ -128,6 +128,9 @@
             <div class="UserInfo">
                 <UserBox :id="Info.n_uid"></UserBox>
             </div>
+             <div class="NavBar">
+                <NeedStar></NeedStar>
+            </div>
             <div class="NavBar">
                 <div class="title">
                     <img src="/assets/1.png" alt="">
