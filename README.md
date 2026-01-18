@@ -9,7 +9,6 @@
 ![Vue](https://img.shields.io/badge/Vue-3.5%2B-42b883.svg)
 ![Nuxt](https://img.shields.io/badge/Nuxt-3.17%2B-00dc82.svg)
 
-[演示地址](https://bbs.nacr.cn/)
 
 
 
@@ -20,6 +19,7 @@
 
 - gitee项目地址：[https://gitee.com/wuaxcn/nacrbbs](https://gitee.com/wuaxcn/nacrbbs)
 - github项目地址：[https://github.com/nacrcn/nacrbbs](https://github.com/nacrcn/nacrbbs)
+- 演示站：[https://bbs.nacr.cn/](https://bbs.nacr.cn/)
 
 - 问题反馈：[Issues](https://gitee.com/wuaxcn/nacrbbs/issues)
 - QQ：21089086

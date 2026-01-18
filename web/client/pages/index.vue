@@ -9,25 +9,14 @@
         <div class="layout">
             <div class="headerBox">
                 <div class="header">
-                 
+
                     <img class="logo" @click="navigateTo('/')" :src="SiteConfig.$state.Config.n_web_logo" alt="">
                     <div class="NavBox">
                         <NuxtLink class="nav-link" to="/">首页</NuxtLink>
 
                     </div>
                 </div>
-                <!-- <div class="Icon">
-                    <a-space :size="20">
-                        <a-badge :count="9">
-                            <a-button shape="circle">
-                                <template #icon>
-                                    <icon-message />
-                                </template>
-                            </a-button>
-                        </a-badge>
-                    </a-space>
-
-                </div> -->
+       
                 <div class="user" @click="GoUser()">
                     <img class="avatar" :src="UserInfo.$state.UserInfo?.n_avatar" alt="">
                     <span class="nickname">{{ UserInfo.$state.UserInfo?.n_nickname }}</span>
@@ -55,7 +44,7 @@
                 <div class="main-content">
                     <div class="content">
                         <NuxtPage />
-                    <Tabbar></Tabbar>
+                        <Tabbar></Tabbar>
                     </div>
                 </div>
             </div>

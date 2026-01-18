@@ -24,6 +24,7 @@
                         <p>热门UP主</p>
                     </div>
                 </div>
+              
             </div>
             <div class="Content">
                 <NuxtPage />
@@ -71,6 +72,7 @@ const changeIndexShow = (index, path) => {
             max-width: 1280px;
             display: flex;
             padding-top: 70px;
+
             .Sidebar {
                 max-height: calc(100vh - 180px);
                 overflow: hidden;
