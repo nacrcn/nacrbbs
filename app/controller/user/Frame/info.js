@@ -66,6 +66,12 @@ export default {
         delete pre.n_password;
         delete pre.n_registertime;
         delete pre.n_username;
+        delete pre.n_captcha
+        delete pre.n_group_id
+        delete pre.n_group_time
+        delete pre.n_administrator
+        delete pre.n_encoding
+        delete pre.n_balance
 
         await global.db.update('n_users', pre, 'id = ?', [Ware.id])
 

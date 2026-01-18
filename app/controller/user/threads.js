@@ -128,7 +128,7 @@ export default {
         /* 删除tclist */
         await global.db.delete('n_tclist', 'n_tid = ?', [pre.id])
         /* 删除评论 */
-        await global.db.delete('n_comments', 'n_tid = ?', [pre.id]);
+        await global.db.delete('n_comment', 'n_tid = ?', [pre.id]);
         await global.db.delete('n_threads', 'id = ? ', [pre.id]);
         global.sendMsg(reply, 200, '删除成功');
 
@@ -173,6 +173,10 @@ export default {
         if (!Threads || Threads.length === 0) {
             return global.sendMsg(reply, 404, '帖子不存在');
         }
+
+        if(!pre.n_html || pre.n_html.length < 1){
+            return global.sendMsg(reply, 400, '评论内容不能为空');
+        }
      
 
         let from = {
@@ -182,8 +186,6 @@ export default {
             n_cid: pre.n_cid ?? 0,
             n_time: new Date()
         }
-        console.log(from);
-
         await global.db.insert('n_comment', from);
 
         /* 写入分类热度 */

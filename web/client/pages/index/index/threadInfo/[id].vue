@@ -135,8 +135,10 @@ const SubmitForm = async () => {
         } else {
             res = await useApiFetch().post('/api/EditThreads', subFrom)
         }
+
         if (res.code == 200) {
             Message.success('提交成功')
+            navigateTo('/')
 
         } else {
             Message.error(res.message || '提交失败')

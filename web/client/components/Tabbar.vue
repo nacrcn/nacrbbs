@@ -58,7 +58,7 @@ const ChangePage = (index) => {
         border-radius: 10px;
         padding: 10px;
         display: flex;
-
+z-index: 999;
         .TabbarItem {
             text-align: center;
             width: 100%;

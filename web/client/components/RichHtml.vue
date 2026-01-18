@@ -55,15 +55,17 @@ watch(() => props.html, highlight)
 }
 
 img {
-  max-width: 100%;
+  width: 100%;
   border-radius: 10px;
+  height: auto;
   margin: 10px auto;
 }
 
 video {
-  max-width: 100%;
+  width: 100%;
   border-radius: 10px;
   margin: 10px auto;
+  height: auto;
 }
 
 pre code {

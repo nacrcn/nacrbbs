@@ -69,7 +69,7 @@
                         <icon-message class="icon" />
                         <span>{{ Info.n_msgs || 0 }}</span>
                     </div>
-                    <div class="Item">
+                    <div class="Item" @click="ShareShow = true">
                         <icon-share-internal class="icon" />
                         <span>分享</span>
                     </div>
@@ -187,6 +187,12 @@
 
             </template>
         </popupMob>
+        <popupMob v-model:modelValue="ShareShow" :Title="'分享'" Nook>
+            <template #content>
+                <Share :data="Info"></Share>
+            </template>
+        </popupMob>
+        <!-- 分享海报 Share -->
     </div>
 </template>
 
@@ -382,6 +388,9 @@ const reportThreads = async () => {
         Message.error(res.msg || '点赞失败')
     }
 }
+
+/* 分享帖子 ShareShow */
+const ShareShow = ref(false)
 </script>
 
 

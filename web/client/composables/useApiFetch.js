@@ -1,17 +1,14 @@
 // composables/useApiFetch.js
-
+import Config from '../app-config.js'
 export function useApiFetch() {
   // const config = useRuntimeConfig()
   const token = useCookie('UToken').value
-  // const apiBase = 'http://127.0.0.1:9999'
-  // const apiBase = 'http://192.168.10.157:9999'
-  const apiBase = 'https://api.bbs.nacr.cn'
+  const apiBase = Config.apiBase
 
   const toUrlEncoded = (obj) =>
     Object.keys(obj)
       .map((key) => `${encodeURIComponent(key)}=${encodeURIComponent(obj[key])}`)
       .join('&')
-
 
   const request = async (method, url, data = {}, headers = {}) => {
     const res = await useFetch(apiBase + url, {

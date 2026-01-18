@@ -1,7 +1,7 @@
 <template>
-    <div class="HeaderBox">
+    <div class="HeaderBox" @click.stop="">
 
-        <div :class="{ downBoxTos: true, downBoxTosavtive: props.modelValue }" @click="close()">
+        <div :class="{ downBoxTos: true, downBoxTosavtive: props.modelValue }" @click.stop="close()">
             <div class="Neibox" @click.stop="">
                 <div class="AppBtnList">
                     <p class="AppBtnListTitle">
@@ -91,7 +91,6 @@ const ok = () => {
         backdrop-filter: blur(10px);
         opacity: 0;
         transition: all 0.3s ease-in-out;
-
         .Neibox {
             position: absolute;
             bottom: -100%;
@@ -270,7 +269,7 @@ const ok = () => {
 @media screen and (max-width: 768px) {
     .downBoxTosavtive {
         opacity: 1;
-        z-index: 30;
+        z-index: 9999;
 
 
         .Neibox {
@@ -283,7 +282,7 @@ const ok = () => {
 @media screen and (min-width: 768px) {
     .downBoxTosavtive {
         opacity: 1;
-        z-index: 30;
+        z-index: 9999;
 
         .Neibox {
             bottom: 50%;

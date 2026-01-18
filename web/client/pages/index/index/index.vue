@@ -82,7 +82,7 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { useRouter } from 'vue-router'
+import { Message } from '@arco-design/web-vue';
 /* 获取分类列表 GetCategory */
 const CategoryList = ref([])
 const GetCategory = async () => {
@@ -136,7 +136,7 @@ const GetThreads = async () => {
             ThreadsList.value = res.data
             from.value.total = res.total
         } else {
-            Message.error(res.message || '获取文章列表失败')
+            // Message.error(res.message || '获取文章列表失败')
         }
         loading.value = false
     } catch (error) {
