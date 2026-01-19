@@ -23,29 +23,38 @@
                 </div>
             </div>
             <div class="user-statistics">
-                <BoxTitle>辉煌如我</BoxTitle>
-                <div class="flex">
-                    <div class="statistics-content">
-                        <p>{{ TBBSInfo.posts }}</p>
-                        <p>我的帖子</p>
-                    </div>
-                    <div class="statistics-content">
-                        <p>{{ TBBSInfo.n_comment }}</p>
-                        <p>我的回复</p>
-                    </div>
-                    <div class="statistics-content">
-                        <p>{{ TBBSInfo.followers }}</p>
-                        <p>我的粉丝</p>
-                    </div>
-                    <div class="statistics-content">
-                        <p>{{ TBBSInfo.following }}</p>
-                        <p>我的关注</p>
-                    </div>
+                <div class="statistics-content">
+                    <p>帖子（{{ TBBSInfo.posts }}）</p>
+                </div>
+                <div class="statistics-content">
+                    <p>回复（{{ TBBSInfo.n_comment }}）</p>
+                </div>
+                <div class="statistics-content">
+                    <p>粉丝（{{ TBBSInfo.followers }}）</p>
+                </div>
+                <div class="statistics-content">
+                    <p>关注（{{ TBBSInfo.following }}）</p>
                 </div>
             </div>
-
+            <NavBox :Item="[
+                {
+                    value: '1',
+                    name: `帖子（${TBBSInfo.posts}）`
+                },
+                {
+                    value: '2',
+                    name: `回复（${TBBSInfo.n_comment}）`
+                },
+                {
+                    value: '3',
+                    name: `粉丝（${TBBSInfo.followers}）`
+                },
+                {
+                    value: '4',
+                    name: `关注（${TBBSInfo.following}）`
+                },
+            ]" v-model:modelValue="showIndex" :authWidth="true" style="margin-bottom: 20px;"></NavBox>
             <!-- 底部区域 n_balance -->
-            <BoxTitle>战胜附体</BoxTitle>
             <div class="Content">
                 <div class="VipBox" @click="navigateTo('/user/vip')">
                     <p class="VipBoxTitle">{{ UserInfo.$state.UserInfo?.VipInfo?.n_name }}</p>
@@ -71,6 +80,12 @@
                                 </template>
                                 充值
                             </a-button>
+                            <!-- <a-button type="primary" size="small" @click="navigateTo('/user/withdraw')">
+                                <template #icon>
+                                    <icon-schedule />
+                                </template>
+                                提现
+                            </a-button> -->
                         </a-space>
                     </div>
                 </div>
@@ -87,7 +102,7 @@
                 <div class="InfoItem">
                     <span class="InfoItemTitle">我的性别:</span>
                     <span class="InfoItemConte">{{ UserInfo.$state.UserInfo.n_gender === '1' ? '男' : '女'
-                        }}</span>
+                    }}</span>
                 </div>
                 <div class="InfoItem">
                     <span class="InfoItemTitle">我的编码:</span>
@@ -170,32 +185,6 @@ const showIndex = ref('1')
     background-color: #fff;
     padding: 20px;
     border-radius: 20px;
-
-    .user-statistics {
-        gap: 10px;
-        margin: 10px auto;
-        border-radius: 10px;
-
-        .flex {
-            display: flex;
-            width: calc(100% - 30px);
-            margin: 0 auto;
-            border-radius: 10px;
-            padding: 10px 0px;
-            border: 1px solid #fff;
-
-            &:hover {
-                border: 1px solid #00c451;
-            }
-        }
-
-        .statistics-content {
-            width: 100%;
-            text-align: center;
-            line-height: 20px;
-            border-radius: 10px;
-        }
-    }
 
     .Pagecontent {
         width: calc(100%);

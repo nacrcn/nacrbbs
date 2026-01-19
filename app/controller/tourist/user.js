@@ -5,6 +5,9 @@ export default {
         const pre = request.body;
         const Ware = request.Ware;
         if (pre.id) {
+            if(pre.id == 'me'){
+                pre.id = Ware.id;
+            }
             const res = await global.db.query('SELECT * FROM n_users WHERE id = ?', [pre.id])
             if (res.length == 0) {
                 global.sendMsg(reply, 404, '用户不存在');

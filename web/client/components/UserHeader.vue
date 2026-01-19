@@ -68,7 +68,7 @@ const goBack = () => {
 
         overflow: hidden;
 
-        max-width: calc(100% - 40px);
+        max-width: calc(100% - 20px);
 
         margin: 0 auto;
 

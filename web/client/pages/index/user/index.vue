@@ -168,7 +168,6 @@ const goPage = (path, key) => {
 
     .Content {
         width: calc(100% - 200px);
-        height: calc(100vh - 100px);
         overflow: hidden;
         overflow-y: auto;
     }

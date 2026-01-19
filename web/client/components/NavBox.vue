@@ -1,11 +1,12 @@
 <template>
     <div class="">
 
-        <div class="NavLisbox">
-            <div v-for="value in Item" :class="['Item', { active: modelValue === value.value }]" @click="ChangeNav(value.value)">
-                <span>{{value.name}}</span>
+        <div :class="['NavLisbox', { authWidth: authWidth }]">
+            <div v-for="value in Item" :class="['Item', { active: modelValue === value.value }]"
+                @click="ChangeNav(value.value)">
+                <span>{{ value.name }}</span>
             </div>
-            
+
         </div>
 
     </div>
@@ -17,15 +18,19 @@ import { useRoute } from 'vue-router'
 const route = useRoute()
 const emit = defineEmits(['change'])
 const active = ref(1)
-
+const box = ref(null)
 const props = defineProps({
-     modelValue: {
+    modelValue: {
         type: String,
         default: '',
     },
     Item: {
         type: Array,
         default: []
+    },
+    authWidth: {
+        type: Boolean,
+        default: false
     }
 })
 
@@ -40,7 +45,6 @@ const ChangeNav = (value) => {
 
 }
 </script>
-
 
 <style lang="scss" scoped>
 .NavLisbox {
@@ -87,5 +91,18 @@ const ChangeNav = (value) => {
             color: rgb(0, 209, 129);
         }
     }
+}
+
+.authWidth {
+    display: flex!important;
+    justify-content: center;
+    
+    .Item {
+        width: 100%!important;
+        display: block!important;
+        text-align: center;
+        margin-right: 0px!important;
+    }
+
 }
 </style>
