@@ -4,7 +4,7 @@ import Components from 'unplugin-vue-components/vite'
 import { ArcoResolver } from 'unplugin-vue-components/resolvers'
 
 export default defineNuxtConfig({
-   imports: {
+  imports: {
     dirs: ['composables']
   },
   compatibilityDate: '2025-05-15',
@@ -25,6 +25,15 @@ export default defineNuxtConfig({
     pageTransition: {
       name: 'page',
       mode: 'out-in', // 等待当前页面过渡完成再进入新页面
+    },
+    head: {
+      meta: [
+        {
+          name: 'viewport',
+          content:
+            'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'
+        }
+      ]
     }
   },
   vite: {
