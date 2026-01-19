@@ -11,11 +11,13 @@
 
             </a-page-header>
             <div class="Pagecontent">
-                <a-tabs v-model:active-key="GetFrom.status" @change="GetUserList">
+                <a-tabs v-model:active-key="GetFrom.status" @change="handleTabChange">
                     <a-tab-pane key="1" title="积分账单"></a-tab-pane>
                     <a-tab-pane key="2" title="余额账单"></a-tab-pane>
+                    <a-tab-pane key="3" title="提现记录"></a-tab-pane>
                 </a-tabs>
-                <a-table style="height: calc(100vh - 230px);" :columns="columns" :data="UserList" :pagination="false"
+                <!-- 积分/余额账单 -->
+                <a-table v-if="GetFrom.status != '3'" style="height: calc(100vh - 230px);" :columns="columns" :data="UserList" :pagination="false"
                     :loading="loading" class="bill-table">
                     <template #n_type="{ record }">
                         <a-tag v-if="record.n_type == 1" color="arcoblue">
@@ -40,6 +42,22 @@
                         <a-pagination @change="GetUserList" @page-size-change="GetUserList"
                             v-model:current="GetFrom.page" v-model:pageSize="GetFrom.pagesize" :total="GetFrom.total"
                             size="mini" show-total show-page-size :page-size-options="[50, 100, 200, 500, 1000]" />
+                    </template>
+                </a-table>
+
+                <!-- 提现记录 -->
+                <a-table v-if="GetFrom.status == '3'" style="height: calc(100vh - 230px);" :columns="withdrawColumns" :data="Wlist" :pagination="false"
+                    :loading="loading" class="bill-table">
+                    <template #n_type="{ record }">
+                        <a-tag v-if="record.n_type == '1'" color="blue">待审核</a-tag>
+                        <a-tag v-else-if="record.n_type == '2'" color="green">已打款</a-tag>
+                        <a-tag v-else-if="record.n_type == '3'" color="red">已驳回</a-tag>
+                        <a-tag v-else color="gray">未知</a-tag>
+                    </template>
+                    <template #footer>
+                        <a-pagination @change="GetWithdrawList" @page-size-change="GetWithdrawList"
+                            v-model:current="Getrom.page" v-model:pageSize="Getrom.pagesize" :total="Getrom.total"
+                            size="mini" show-total show-page-size :page-size-options="[20, 50, 100]" />
                     </template>
                 </a-table>
             </div>
@@ -95,10 +113,80 @@ const columns = [
 
 ];
 
+/* 获取提现记录 GetWithdrawList */
+const Wlist = ref([])
+const Getrom = ref({
+    page: 1,
+    pagesize: 20,
+    total: 0
+})
+const GetWithdrawList = async () => {
+    const res = await useApiFetch().post('/api/GetWithdrawList', Getrom.value)
+    if (res.code === 200) {
+        Wlist.value = res.data
+        Getrom.value.total = res.total
+    } else {
+        Message.error(res.msg)
+    }
+}
 
+// 提现记录表格列
+const withdrawColumns = [
+    {
+        title: '申请时间',
+        dataIndex: 'n_time',
+        ellipsis: true,
+        tooltip: true,
+    },
+    {
+        title: '订单号',
+        dataIndex: 'n_no',
+        ellipsis: true,
+        tooltip: true,
+    },
+    {
+        title: '提现金额',
+        dataIndex: 'n_amount',
+    },
+    {
+        title: '手续费',
+        dataIndex: 'n_handling_fee',
+    },
+    {
+        title: '实际到账',
+        dataIndex: 'n_received',
+    },
+    {
+        title: '收款账号',
+        dataIndex: 'n_acc',
+        ellipsis: true,
+        tooltip: true,
+    },
+    {
+        title: '状态',
+        slotName: 'n_type',
+    },
+    {
+        title: '到账时间',
+        dataIndex: 'n_oktime',
+        ellipsis: true,
+        tooltip: true,
+    },
+];
 
+// 切换 tab
+const handleTabChange = (key) => {
+    GetFrom.value.status = key
+    if (key === '3') {
+        GetWithdrawList()
+    } else {
+        GetFrom.value.page = 1
+        GetUserList()
+    }
+}
 onMounted(() => {
     GetUserList()
+    GetWithdrawList()
 })
 </script>
 
