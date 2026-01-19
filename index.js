@@ -33,11 +33,16 @@ async function main() {
             fieldSize: 10 * 1024 * 1024,
         }
     })
-    // 提供静态文件服务
+    // 提供静态文件服务（强制下载 HTML 文件）
     await app.register(fastifyStatic, {
         root: path.join(__dirname, 'public'),
         prefix: '/public/',
-        decorateReply: false
+        decorateReply: false,
+        setHeaders: (res, pathName) => {
+            if (pathName.endsWith('.html') || pathName.endsWith('.htm')) {
+                res.setHeader('Content-Disposition', 'attachment');
+            }
+        }
     });
     // 提供web目录下的HTML文件访问
     await app.register(fastifyStatic, {
