@@ -3,10 +3,7 @@
         <div class="PageContent">
 
             <div class="ConBox">
-                <div class="title">
-                    <img src="/assets/1.png" alt="">
-                    <span>我有话要说</span>
-                </div>
+                <BoxTitle>我有话要说</BoxTitle>
                 <a-form :model="form" :layout="'vertical'">
                     <a-form-item field="name" label="标题">
                         <a-input class="road" v-model="form.n_name" placeholder="请输入标题" />
@@ -24,26 +21,23 @@
             </div>
             <div class="RightBox">
                 <div class="Items">
-                    <div class="title">
-                        <img src="/assets/1.png" alt="">
-                        <span>确认信息</span>
-                    </div>
+                    <BoxTitle>确认信息</BoxTitle>
                     <a-form :model="form" :layout="'vertical'">
                         <a-form-item field="post" label="分类">
                             <a-select multiple class="road" :max-tag-count="2" allow-clear v-model="form.n_category"
                                 placeholder="请选择分类">
                                 <a-option v-for="item in CategoryList" :key="item.id" :value="item.id">{{ item.n_name
-                                }}</a-option>
+                                    }}</a-option>
                             </a-select>
                         </a-form-item>
                         <a-form-item field="post" label="话题">
                             <a-select multiple class="road" :max-tag-count="2" allow-clear v-model="form.n_topic"
                                 placeholder="请选择话题">
                                 <a-option v-for="item in TopicList" :key="item.id" :value="item.id">{{ item.n_name
-                                }}</a-option>
+                                    }}</a-option>
                             </a-select>
                         </a-form-item>
-                     
+
                         <a-form-item field="post" label="权限">
                             <a-space>
                                 <a-select class="road" v-model="form.n_permission" placeholder="请选择">
@@ -210,19 +204,6 @@ if (id == 'add') {
 </script>
 
 <style lang="scss" scoped>
-.title {
-    display: flex;
-    line-height: 30px;
-    gap: 4px;
-    margin-bottom: 10px;
-
-    img {
-        width: 20px;
-        height: 20px;
-        margin: 5px;
-    }
-}
-
 /* 视口大于768px */
 @media (min-width: 768px) {
     .Pageas {
@@ -292,12 +273,14 @@ if (id == 'add') {
                 margin: 0px auto;
 
             }
+
             .RightBox {
-                 width: calc(100% - 40px);
+                width: calc(100% - 40px);
                 padding: 15px;
                 border-radius: 20px;
                 margin: 10px auto;
                 background-color: #fff;
+
                 .Items {
                     padding: 15px;
                     border-radius: 10px;

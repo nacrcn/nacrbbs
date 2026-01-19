@@ -2,10 +2,7 @@
     <div class="MainBox">
         <div class="MainContent">
             <div class="TopB">
-                <div class="title">
-                    <img src="/assets/1.png" alt="">
-                    <span>视频图片</span>
-                </div>
+                <BoxTitle>视频图片</BoxTitle>
                 <div class="TopBox">
                     <a-input class="search-input" v-model="from.search" placeholder="请输入搜索内容" allow-clear>
                         <template #prefix>
@@ -74,17 +71,11 @@
         </div>
         <div class="SidebarRight">
             <div class="NavBar">
-                <div class="title">
-                    <img src="/assets/1.png" alt="">
-                    <span>热门圈子</span>
-                </div>
+                <BoxTitle>热门圈子</BoxTitle>
                 <ClassItem v-for="value in CategoryList" :key="value.n_name" :data="value"></ClassItem>
             </div>
             <div class="NavBar">
-                <div class="title">
-                    <img src="/assets/1.png" alt="">
-                    <span>热门话题</span>
-                </div>
+                <BoxTitle>热门话题</BoxTitle>
                 <TopicItem v-for="value in TopicList" :key="value.n_name" :data="value"></TopicItem>
             </div>
              <div class="NavBar">
@@ -179,18 +170,6 @@ onMounted(() => {
 
 
 <style lang="scss" scoped>
-.title {
-    display: flex;
-    line-height: 30px;
-    gap: 4px;
-    margin-bottom: 10px;
-
-    img {
-        width: 20px;
-        height: 20px;
-        margin: 5px;
-    }
-}
 
 /* 视口大于768px时的样式 */
 @media (min-width: 768px) {

@@ -3,10 +3,7 @@
         <!-- 主要内容区域 -->
         <div class="MainContent">
             <div>
-                <div class="title">
-                    <img src="/assets/1.png" alt="">
-                    <span>热门圈子</span>
-                </div>
+                <BoxTitle>热门圈子</BoxTitle>
             </div>
             <div class="ListBox">
                 <ClassItem v-for="value in ThreadsList" :key="value.n_name" :data="value"></ClassItem>
@@ -48,18 +45,7 @@ onMounted(() => {
 
 
 <style lang="scss" scoped>
-.title {
-    display: flex;
-    line-height: 30px;
-    gap: 4px;
-    margin-bottom: 10px;
 
-    img {
-        width: 20px;
-        height: 20px;
-        margin: 5px;
-    }
-}
 
 /* 视口大于768px时的样式 */
 @media (min-width: 768px) {

@@ -76,10 +76,7 @@
                 </div>
             </div>
             <div class="comment">
-                <div class="title">
-                    <img src="/assets/1.png" alt="">
-                    <span>我有话要说</span>
-                </div>
+                <BoxTitle>我有话要说</BoxTitle>
                 <div class="content">
                     <a-textarea class="road" v-model="form.n_html" placeholder="请输入评论" :max-length="100" allow-clear
                         show-word-limit />
@@ -95,10 +92,7 @@
                 </div>
             </div>
             <div class="comment">
-                <div class="title">
-                    <img src="/assets/1.png" alt="">
-                    <span>大家都再说</span>
-                </div>
+                <BoxTitle>大家都再说</BoxTitle>
                 <a-spin :loading="loading" tip="正在加载" style="width: 100%;height: 100%;">
 
                     <CommentItem v-for="value in CommentList" :key="value.id" :data="value"
@@ -132,10 +126,8 @@
                 <NeedStar></NeedStar>
             </div>
             <div class="NavBar">
-                <div class="title">
-                    <img src="/assets/1.png" alt="">
-                    <span>热门话题</span>
-                </div>
+                <BoxTitle>热门话题</BoxTitle>
+               
                 <TopicItem v-for="value in TopicList" :key="value.n_name" :data="value"></TopicItem>
             </div>
         </div>
@@ -398,18 +390,6 @@ const ShareShow = ref(false)
 
 
 <style lang="scss" scoped>
-.title {
-    display: flex;
-    line-height: 30px;
-    gap: 4px;
-    margin-bottom: 10px;
-
-    img {
-        width: 20px;
-        height: 20px;
-        margin: 5px;
-    }
-}
 
 /* 视口大于768px时的样式 */
 @media (min-width: 768px) {

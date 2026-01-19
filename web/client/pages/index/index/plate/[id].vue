@@ -81,10 +81,7 @@
 
             </div>
             <div class="NavBar">
-                <div class="title">
-                    <img src="/assets/1.png" alt="">
-                    <span>热门话题</span>
-                </div>
+                <BoxTitle>热门话题</BoxTitle>
                 <TopicItem v-for="value in TopicList" :key="value.n_name" :data="value"></TopicItem>
             </div>
         </div>
@@ -160,18 +157,6 @@ onMounted(() => {
 
 
 <style lang="scss" scoped>
-.title {
-    display: flex;
-    line-height: 30px;
-    gap: 4px;
-    margin-bottom: 10px;
-
-    img {
-        width: 20px;
-        height: 20px;
-        margin: 5px;
-    }
-}
 
 /* 视口大于768px时的样式 */
 @media (min-width: 768px) {

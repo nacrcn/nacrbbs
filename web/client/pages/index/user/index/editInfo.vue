@@ -82,6 +82,7 @@ const editwebinfo = async () => {
     const res = await useApiFetch().post('/api/editinfo', form.value)
     if (res.code == 200) {
         Message.success(res.msg)
+        UserInfo.init()
     } else {
         Message.error(res.msg)
     }

@@ -1,385 +1,419 @@
 <template>
-    <div class="TopUpPage">
-        <div class="Page">
-            <div class="PageHeader">
-                <h2>余额提现</h2>
-                <p class="current-balance">当前余额：<span class="amount">¥{{ currentBalance }}</span></p>
-            </div>
-            <div class="Pagecontent">
-                <!-- 充值金额选择 -->
-                <div class="section">
-                    <h3>选择充值金额</h3>
-                    <div class="amount-grid">
-                        <div v-for="item in presetAmounts" :key="item.amount"
-                            :class="['amount-item', { active: from.price === item.amount }]"
-                            @click="from.price = item.amount">
-                            <div class="amount-value">¥{{ item.amount }}</div>
-                        </div>
-                    </div>
+	<div class="withdraw-container">
+		<UserHeader title="余额提现"></UserHeader>
 
-                    <!-- 自定义金额 -->
-                    <div class="custom-amount">
-                        <a-input-number v-model="from.price" placeholder="自定义金额" :min="1" :max="10000"
-                            style="width: 200px" />
-                        <span class="unit">元</span>
-                    </div>
-                </div>
+		<div class="content">
+
+			<!-- 提现表单 -->
+			<div class="withdraw-form">
+				<div class="form-item">
+				<BoxTitle><span class="form-label">提现金额 <span style="font-size: 12px;">(可提现 ¥{{ userInfo.n_balance || 0
+					}})</span></span></BoxTitle>
+
+					<div class="amount-input-wrapper">
+						<span class="currency">¥</span>
+						<a-input class="amount-input" type="digit" v-model="form.amount" placeholder="请输入提现金额"
+							@input="onAmountInput" />
+					</div>
+					<div class="tips">
+						<span class="tip-span">最小提现金额：¥{{ minAmount }}</span>
+						<span class="tip-span">提现手续费：{{ userInfo.VipInfo?.n_withdrawal_fee || '0' }}%</span>
+					</div>
+				</div>
+
+				<div class="form-item">
+				<BoxTitle>预计到账金额</BoxTitle>
+
+					<div class="actual-amount">
+						¥{{ actualAmount }}
+					</div>
+				</div>
+
+				<div class="form-item">
+				<BoxTitle>提现方式</BoxTitle>
+					<div class="withdraw-methods">
+						<div class="method-item" v-for="(value, key) in withdrawMethods" :key="key"
+							:class="{ active: form.method === value.n_code }" @click="selectMethod(value)">
+							<!-- <span class="method-icon">{{ value.n_icon }}</span> -->
+							<image class="method-icon" :src="value.n_icon"></image>
+							<span class="method-name">{{ value.n_name }}</span>
+						</div>
+					</div>
+				</div>
+				<div class="form-item" v-if="form.methodacctype === '1'">
+				<BoxTitle>收款账号</BoxTitle>
+					<a-input class="account-input" type="span" v-model="form.account" placeholder="请输入账号" />
+				</div>
+				<div class="submit-section">
+					<a-button span="立即提现" class="submit-btn" type="primary" size="large" :loading="submitting"
+						@click="handleSubmit"
+						>
+						立即提现
+					</a-button>
+				</div>
+
+			</div>
+
+			<!-- 提现规则 -->
+			<div class="withdraw-rules">
+				<div class="rules-title">提现规则</div>
+				<div class="rules-content">
+					<div class="rule-item">• 单笔提现金额不得少于{{ minAmount }}元</div>
+					<div class="rule-item">• 提现手续费为{{ userInfo.VipInfo?.n_withdrawal_fee || '0' }}%</div>
+					<div class="rule-item">• 提现申请将在1-3个工作日内到账</div>
+					<div class="rule-item">• 请确保提现账户信息准确无误</div>
+				</div>
+			</div>
 
 
-                <!-- 提交按钮 -->
-                <div class="section">
-                    <a-button type="primary" size="large" :loading="loading"
-                        @click="handleSubmit" class="submit-btn">
-                        立即充值 ¥{{ from.price }}
-                    </a-button>
-
-                    <div class="tips">
-                        <p>• 充值成功后余额将立即到账</p>
-                        <p>• 如遇问题请联系客服</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+		</div>
+	</div>
 </template>
 
 <script setup>
 import { Message } from '@arco-design/web-vue';
 
-// 获取用户信息
-const UserInfo = useUserInfo()
-UserInfo.init()
+// 最小提现金额
+const minAmount = ref(0.1)
 
-// 响应式数据
-const currentBalance = ref(UserInfo.$state.UserInfo?.n_balance || '0.00')
-const selectedAmount = ref(0)
-const customAmount = ref(null)
-const loading = ref(false)
+/* 获取我的信息 */
+const userInfo = ref({})
+const getUserInfo = async () => {
+	try {
+		const res = await useApiFetch().post('/api/myinfo')
+		if (res.code == 200) {
+			userInfo.value = res.data
+			minAmount.value = res.data.VipInfo?.n_withdrawal_min || 0.1
+		} else {
+			navigateTo('/login')
+		}
+	} catch (error) {
+		Message.error('获取用户信息失败，请刷新页面重试')
+	}
+}
+getUserInfo()
 
-// 预设充值金额
-const presetAmounts = ref([
-    { amount: 10, bonus: 0 },
-    { amount: 50, bonus: 5 },
-    { amount: 100, bonus: 12 },
-    { amount: 200, bonus: 30 },
-    { amount: 500, bonus: 80 },
-    { amount: 1000, bonus: 200 }
-])
-
-
-
-// 计算最终金额
-const finalAmount = computed(() => {
-    if (selectedAmount.value > 0) {
-        return selectedAmount.value
-    }
-    if (customAmount.value && customAmount.value > 0) {
-        return customAmount.value
-    }
-    return 0
+const form = ref({
+	amount: '',
+	method: '',
+	account: ''
 })
 
-// 计算赠送金额
-const finalBonus = computed(() => {
-    const amount = finalAmount.value
-    const matched = presetAmounts.value.find(item => item.amount === amount)
-    return matched ? matched.bonus : 0
+const submitting = ref(false)
+
+// 计算实际到账金额
+const actualAmount = computed(() => {
+	if (!form.value.amount || isNaN(form.value.amount)) {
+		return '0.00'
+	}
+	const amount = parseFloat(form.value.amount)
+	const feeRate = (userInfo.value.VipInfo?.n_withdrawal_fee || 0) / 100
+	const fee = amount * feeRate
+	const actual = amount - fee
+	return actual.toFixed(2)
 })
 
 
 
-const from = ref({
-    type: 1,
-    price: 10
-})
+// 提现方式相关
+const withdrawMethods = ref([])
 
-// 提交充值
+/* 获取提现方式 */
+const getWithdrawMethods = async () => {
+	try {
+		const res = await useApiFetch().post('/api/GetWithdrawMethod')
+		if (res.code == 200) {
+			withdrawMethods.value = res.data
+			selectMethod(res.data[0])
+		} else {
+			Message.error('获取提现方式失败，请刷新页面重试')
+		}
+	} catch (error) {
+		console.error('获取提现方式失败:', error)
+
+	}
+}
+getWithdrawMethods()
+
+
+// 选择提现方式
+const selectMethod = (method) => {
+	form.value.method = method.n_code
+	form.value.methodacctype = method.n_type
+	form.value.account = '' // 清空账号输入
+}
+
+// 金额输入处理
+const onAmountInput = (e) => {
+	let value = e.detail.value
+	// 限制只能输入数字和小数点
+	value = value.replace(/[^\d.]/g, '')
+	// 限制只能有一个小数点
+	const dotIndex = value.indexOf('.')
+	if (dotIndex !== -1) {
+		value = value.substring(0, dotIndex + 3) // 最多两位小数
+	}
+	form.value.amount = value
+}
+
+/* 提交提现申请 */
 const handleSubmit = async () => {
-    loading.value = true
-    const res = await useApiFetch().post('/api/CreateOrder', {
-        from: JSON.stringify([from.value])
-    })
-    if (res.code === 200) {
-        navigateTo('/user/order/' + res.data.order)
-    } else {
-        Message.error(res.msg)
-    }
-    loading.value = false
+	// 防止重复提交
+	if (submitting.value) {
+		return
+	}
+
+	if (form.value.amount === '' || !form.value.amount) {
+		Message.error('请输入提现金额')
+		return
+	}
+
+	// 立即设置提交状态，防止重复点击
+	submitting.value = true
+
+	const amount = parseFloat(form.value.amount)
+	const balance = parseFloat(userInfo.value.n_balance || 0)
+
+	if (amount < minAmount.value) {
+		submitting.value = false
+		Message.error(`提现金额不能少于${minAmount.value}元`)
+		return
+	}
+
+	if (amount > balance) {
+		submitting.value = false
+		Message.error(`提现金额不能大于可用余额${balance}元`)
+		return
+	}
+
+	try {
+		const res = await useApiFetch().post('/api/UpWithdraw', {
+			n_amount: amount,
+			n_method: form.value.method,
+			n_acc: form.value.account
+		})
+
+		if (res.code === 200) {
+			Message.success('提现申请提交成功')
+			getUserInfo()
+			const UserInfo = useUserInfo()
+			UserInfo.init()
+			form.value.amount = ''
+		} else {
+			Message.error(res.message || '提现申请提交失败')
+		}
+	} catch (error) {
+		Message.error('提现申请提交失败')
+	} finally {
+		// 无论成功失败，都要重置提交状态
+		submitting.value = false
+	}
 }
 </script>
 
 <style lang="scss" scoped>
-.TopUpPage {
-    overflow: hidden;
-    height: calc(100vh - 100px);
-    overflow-y: auto;
+.withdraw-container {}
+
+.content {
+	width: calc(100%);
+	margin: 0 auto;
 }
 
-.Page {
-    background-color: #fff;
-    margin: 1px;
-    width: calc(100% - 2px);
-    border-radius: 8px;
-    overflow: hidden;
-    max-width: 700px;
-    margin: 20px auto;
+.user-info-card {
+	background: rgba(255, 255, 255, 0.95);
+	border-radius: 20px;
+	padding: 25px;
+	margin-bottom: 10px;
+	backdrop-filter: blur(10px);
 
-    .PageHeader {
-        padding: 30px;
-        background: linear-gradient(135deg, #0e6eff 0%, #0e6eff 100%);
-        color: white;
-        text-align: center;
+	.info-item {
+		display: flex;
+		justify-content: space-between;
+		align-items: center;
+		margin-bottom: 15px;
 
-        h2 {
-            margin: 0 0 10px 0;
-            font-size: 24px;
-            font-weight: 600;
-        }
+		&:last-child {
+			margin-bottom: 0;
+		}
 
-        .current-balance {
-            margin: 0;
-            font-size: 16px;
-            opacity: 0.9;
+		.label {
+			color: #666;
+			font-size: 14px;
+		}
 
-            .amount {
-                font-weight: 600;
-                font-size: 20px;
-            }
-        }
-    }
+		.balance {
+			color: #333;
+			font-size: 24px;
+			font-weight: bold;
+		}
 
-    .Pagecontent {
-        padding: 30px;
-        width: calc(100% - 60px);
-
-        .section {
-            margin-bottom: 40px;
-
-            h3 {
-                margin: 0 0 20px 0;
-                font-size: 18px;
-                font-weight: 600;
-                color: #333;
-            }
-        }
-    }
-
-    // 充值金额网格
-    .amount-grid {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-        gap: 15px;
-        margin-bottom: 30px;
-
-        .amount-item {
-            border: 2px solid #e5e7eb;
-            border-radius: 12px;
-            padding: 20px 15px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-
-            &:hover {
-                border-color: #667eea;
-                transform: translateY(-2px);
-                box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
-            }
-
-            &.active {
-                border-color: #667eea;
-                // background: linear-gradient(135deg, #0e6eff 0%, #0e6eff 100%);
-                // color: white;
-
-                .amount-bonus {
-                    color: rgba(255, 255, 255, 0.9);
-                }
-            }
-
-            .amount-value {
-                font-size: 24px;
-                font-weight: 700;
-            }
-
-        }
-    }
-
-    // 自定义金额
-    .custom-amount {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-
-        .unit {
-            font-size: 16px;
-            color: #666;
-        }
-    }
-
-    // 支付方式
-    .payment-methods {
-        .payment-item {
-            display: flex;
-            align-items: center;
-            padding: 20px;
-            border: 2px solid #e5e7eb;
-            border-radius: 12px;
-            margin-bottom: 15px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-
-            &:hover {
-                border-color: #667eea;
-                background: #f9fafb;
-            }
-
-            &.active {
-                border-color: #667eea;
-                background: #f0f4ff;
-            }
-
-            .payment-icon {
-                margin-right: 15px;
-                font-size: 24px;
-                color: #667eea;
-            }
-
-            .payment-info {
-                flex: 1;
-
-                .payment-name {
-                    font-size: 16px;
-                    font-weight: 600;
-                    color: #333;
-                    margin-bottom: 4px;
-                }
-
-                .payment-desc {
-                    font-size: 14px;
-                    color: #666;
-                }
-            }
-
-            .payment-radio {
-                font-size: 20px;
-                color: #667eea;
-            }
-        }
-    }
-
-    // 订单摘要
-    .order-summary {
-        background: #f9fafb;
-        border-radius: 12px;
-        padding: 25px;
-
-        .summary-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            font-size: 16px;
-
-            &.bonus {
-                color: #f59e0b;
-            }
-
-            &.total {
-                font-weight: 600;
-                font-size: 18px;
-                color: #333;
-                margin-top: 10px;
-            }
-
-            .value {
-                font-weight: 600;
-            }
-        }
-
-        .summary-divider {
-            height: 1px;
-            background: #e5e7eb;
-            margin: 20px 0;
-        }
-    }
-
-    // 提交按钮
-    .submit-btn {
-        width: 100%;
-        height: 50px;
-        font-size: 18px;
-        font-weight: 600;
-        border-radius: 25px;
-        background: linear-gradient(135deg, #0e6eff 0%, #0e6eff 100%);
-        border: none;
-        margin-bottom: 20px;
-
-        &:hover {
-            opacity: 0.9;
-        }
-    }
-
-    .tips {
-        text-align: center;
-        color: #666;
-        font-size: 14px;
-        line-height: 1.6;
-
-        p {
-            margin: 5px 0;
-        }
-    }
+		.fee {
+			color: #ff6b6b;
+			font-size: 18px;
+			font-weight: bold;
+		}
+	}
 }
 
-// 响应式设计
-@media (max-width: 768px) {
-    .Page {
-        margin: 10px;
-        max-width: none;
-        width: calc(100% - 20px);
+.withdraw-form {
+	background: rgba(255, 255, 255, 0.95);
+	border-radius: 20px;
+	padding: 25px;
+	margin-bottom: 10px;
+	backdrop-filter: blur(10px);
+	width: calc(100% - 50px);
 
-        .PageHeader {
-            padding: 20px;
+	.form-item {
+		margin-bottom: 25px;
 
-            h2 {
-                font-size: 20px;
-            }
+		&:last-child {
+			margin-bottom: 0;
+		}
 
-            .current-balance {
-                font-size: 14px;
+		.form-label {
+			display: block;
+			color: #333;
+			font-size: 16px;
+			font-weight: 500;
+			margin-bottom: 10px;
+		}
 
-                .amount {
-                    font-size: 18px;
-                }
-            }
-        }
+		.amount-input-wrapper {
+			display: flex;
+			align-items: center;
+			background: #f8f9fa;
+			border-radius: 12px;
+			padding: 15px;
+			border: 2px solid transparent;
+			transition: all 0.3s;
+			width: calc(100% - 30px);
 
-        .Pagecontent {
 
-            padding: 20px;
+			.currency {
+				color: #00c451;
+				font-size: 20px;
+				font-weight: bold;
+				margin-right: 10px;
+			}
 
-            .amount-grid {
-                grid-template-columns: repeat(2, 1fr);
-                gap: 10px;
+			.amount-input {
+				flex: 1;
+				font-size: 18px;
+				font-weight: bold;
+				color: #333;
+				outline: none;
+				background: transparent;
+			}
+		}
 
-                .amount-item {
-                    padding: 15px 10px;
+		.tips {
+			margin-top: 8px;
 
-                    .amount-value {
-                        font-size: 20px;
-                    }
-                }
-            }
+			.tip-span {
+				color: #999;
+				font-size: 12px;
+				margin-right: 10px;
+			}
+		}
 
-            .payment-item {
-                padding: 15px;
+		.actual-amount {
+			// background: linear-gradient(135deg, #667eea, #764ba2);
+			color: #00c451;
+			padding: 6px;
+			border-radius: 12px;
+			font-size: 20px;
+			font-weight: bold;
+			span-align: center;
+		}
 
-                .payment-icon {
-                    margin-right: 12px;
-                    font-size: 20px;
-                }
-            }
-        }
-    }
+		.account-input {
+			width: calc(100% - 30px);
+			padding: 15px;
+			background: #f8f9fa;
+			border: 2px solid transparent;
+			border-radius: 12px;
+			font-size: 16px;
+			color: #333;
+			transition: all 0.3s;
+
+			&:focus {
+				border-color: #00c451;
+				background: #fff;
+			}
+		}
+	}
+
+	.withdraw-methods {
+		display: flex;
+		justify-content: space-between;
+		gap: 15px;
+
+		.method-item {
+			flex: 1;
+			display: flex;
+			align-items: center;
+			justify-content: center;
+			padding: 7px 10px;
+			background: #f8f9fa;
+			border: 1px solid #ffffff;
+			border-radius: 12px;
+			cursor: pointer;
+			border: 1px solid #ffffff;
+			transition: all 0.3s;
+
+			&.active {
+				// border-color: #667eea;
+				border: 1px solid #00c451;
+
+			}
+
+			.method-icon {
+				width: 20px;
+				height: 20px;
+				margin-right: 10px;
+			}
+
+			.method-name {
+				font-size: 12px;
+				color: #666;
+			}
+		}
+	}
+}
+
+.withdraw-rules {
+	background: rgba(255, 255, 255, 0.95);
+	border-radius: 20px;
+	padding: 25px;
+	margin-bottom: 20px;
+	backdrop-filter: blur(10px);
+	box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+
+	.rules-title {
+		color: #333;
+		font-size: 16px;
+		font-weight: bold;
+		margin-bottom: 15px;
+	}
+
+	.rules-content {
+		.rule-item {
+			color: #666;
+			font-size: 14px;
+			line-height: 1.6;
+			margin-bottom: 8px;
+		}
+	}
+}
+
+.submit-section {
+	padding: 0 10px;
+
+	.submit-btn {
+		background-color: #00c451;
+		width: 100%;
+
+		border-radius: 20px;
+	}
 }
 </style>
