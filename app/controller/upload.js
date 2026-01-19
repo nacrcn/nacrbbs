@@ -18,14 +18,18 @@ export default {
         
         try {
             const data = await request.file();
-            
+
             if (!data) {
                 global.sendMsg(reply, 400, '请选择要上传的文件');
                 return;
             }
-            
+
+            // 先读取文件内容
+            const buffer = await data.toBuffer();
+            const fileSize = buffer.length;
+
             // 检查文件大小
-            if (data.file.bytesRead > maxSize) {
+            if (fileSize > maxSize) {
                 global.sendMsg(reply, 400, `文件大小不能超过 ${configInfo.n_upload_image_size || '5'}MB`);
                 return;
             }
@@ -44,14 +48,13 @@ export default {
             const filePath = path.join(uploadDir, newFilename);
             
             // 保存文件
-            const buffer = await data.toBuffer();
             await fs.writeFile(filePath, buffer);
             
             // 返回文件信息
             const fileInfo = {
                 filename: newFilename,
                 originalname: data.filename,
-                size: data.file.bytesRead,
+                size: fileSize,
                 mimetype: data.mimetype,
                 path: `/public/upload/${newFilename}`,
                 url: `http://127.0.0.1:9999/public/upload/${newFilename}`,
@@ -82,14 +85,18 @@ export default {
         
         try {
             const data = await request.file();
-            
+
             if (!data) {
                 global.sendMsg(reply, 400, '请选择要上传的文件');
                 return;
             }
-            
+
+            // 先读取文件内容
+            const buffer = await data.toBuffer();
+            const fileSize = buffer.length;
+
             // 检查文件大小
-            if (data.file.bytesRead > maxSize) {
+            if (fileSize > maxSize) {
                 global.sendMsg(reply, 400, `文件大小不能超过 ${configInfo.n_upload_file_size || '10'}MB`);
                 return;
             }
@@ -108,14 +115,13 @@ export default {
             const filePath = path.join(uploadDir, newFilename);
             
             // 保存文件
-            const buffer = await data.toBuffer();
             await fs.writeFile(filePath, buffer);
             
             // 返回文件信息
             const fileInfo = {
                 filename: newFilename,
                 originalname: data.filename,
-                size: data.file.bytesRead,
+                size: fileSize,
                 mimetype: data.mimetype,
                 path: `/public/upload/${newFilename}`,
                 url: `http://127.0.0.1:9999/public/upload/${newFilename}`,
