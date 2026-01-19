@@ -45,7 +45,7 @@ export default {
                         pre.id, Ware.id
                     ])
                     console.log(buylog);
-                    
+
                     if (buylog.length == 0) {
                         thread.n_resources = []
                         thread.n_html = 'needBuy'
@@ -75,7 +75,7 @@ export default {
         if (pre.isMyLike) {
             ordeSql += ` and n_uid in (select n_tid from n_user_like where n_uid = ${Ware.id || 0})`
         }
-        if(pre.ismy){
+        if (pre.ismy) {
             ordeSql += ` and n_uid = ${Ware.id || 0}`
         }
         const SqlBuilder = new global.SqlBuilder();
@@ -111,25 +111,28 @@ export default {
         for (let a in Tclist) {
             CID.push(Tclist[a].n_cid)
         }
-        /* 获取分类 */
-        const Category = await global.db.query(`SELECT id,n_name,n_type,n_icon FROM n_class WHERE id IN (${CID.join(',')})`)
-        // 建立分类映射关系
-        const threadCategoryMap = {};
-        for (let item of Tclist) {
-            if (!threadCategoryMap[item.n_tid]) {
-                threadCategoryMap[item.n_tid] = [];
+
+        if (CID.length > 0) {
+            /* 获取分类 */
+            const Category = await global.db.query(`SELECT id,n_name,n_type,n_icon FROM n_class WHERE id IN (${CID.join(',')})`)
+            // 建立分类映射关系
+            const threadCategoryMap = {};
+            for (let item of Tclist) {
+                if (!threadCategoryMap[item.n_tid]) {
+                    threadCategoryMap[item.n_tid] = [];
+                }
+                const category = Category.find(cat => cat.id === item.n_cid);
+                if (category) {
+                    threadCategoryMap[item.n_tid].push(category);
+                }
             }
-            const category = Category.find(cat => cat.id === item.n_cid);
-            if (category) {
-                threadCategoryMap[item.n_tid].push(category);
-            }
+
+            res.data = res.data.map(thread => {
+                thread.category = threadCategoryMap[thread.id] || [];
+                return thread;
+            });
+
         }
-
-        res.data = res.data.map(thread => {
-            thread.category = threadCategoryMap[thread.id] || [];
-            return thread;
-        });
-
 
         for (let a in res.data) {
             try {
@@ -155,7 +158,7 @@ export default {
         /* 获取评论列表 */
         const SqlBuilder = new global.SqlBuilder();
         let ordeSql = ``
-         if(pre.ismy){
+        if (pre.ismy) {
             ordeSql += ` and n_uid = ${Ware.id || 0}`
         }
 
