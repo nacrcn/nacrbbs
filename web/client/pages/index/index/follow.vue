@@ -5,7 +5,7 @@
                 <BoxTitle>我关注的</BoxTitle>
                 <div class="TopBox">
 
-                    <a-input class="search-input" placeholder="请输入搜索内容" allow-clear>
+                    <a-input class="search-input" placeholder="请输入搜索内容" allow-clear @press-enter="GetThreads">
                         <template #prefix>
                             <icon-search />
                         </template>

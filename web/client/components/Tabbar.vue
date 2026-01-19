@@ -53,12 +53,15 @@ const ChangePage = (index) => {
         bottom: 10px;
         left: 10px;
         width: calc(100% - 40px);
-        height: 30px;
-        background-color: #fff;
-        border-radius: 10px;
+        height: 35px;
+        background-color: #ffffffc0;
+        border-radius: 30px;
         padding: 10px;
         display: flex;
-z-index: 999;
+        z-index: 999;
+        backdrop-filter: blur(10px);
+        box-shadow: inset 0 0 10px rgba(8, 255, 140, 0.068);
+
         .TabbarItem {
             text-align: center;
             width: 100%;

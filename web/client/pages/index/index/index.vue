@@ -4,7 +4,7 @@
             <div class="TopB">
                 <BoxTitle>花花世界迷人眼</BoxTitle>
                 <div class="TopBox">
-                    <a-input class="search-input" v-model="from.search" placeholder="请输入搜索内容" allow-clear>
+                    <a-input class="search-input" v-model="from.search" placeholder="请输入搜索内容" allow-clear @press-enter="GetThreads">
                         <template #prefix>
                             <icon-search />
                         </template>

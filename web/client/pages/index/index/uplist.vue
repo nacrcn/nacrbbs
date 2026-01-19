@@ -4,7 +4,7 @@
             <div class="TopB">
                 <BoxTitle>热门UP主 谁的最爱</BoxTitle>
                 <div class="TopBox">
-                    <a-input class="search-input" v-model="from.search" placeholder="UP主昵称" allow-clear>
+                    <a-input class="search-input" v-model="from.search" placeholder="UP主昵称" allow-clear @press-enter="GetThreads">
                         <template #prefix>
                             <icon-search />
                         </template>
