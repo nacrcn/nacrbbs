@@ -23,8 +23,8 @@
                 </div>
             </div>
             <div class="user-statistics">
-                <BoxTitle>辉煌如我</BoxTitle>
-                <div class="flex">
+                <BoxTitle>我的动态</BoxTitle>
+                <div class="flex" @click="navigateTo('/user/myInfo')">
                     <div class="statistics-content">
                         <p>{{ TBBSInfo.posts }}</p>
                         <p>我的帖子</p>
@@ -183,7 +183,7 @@ const showIndex = ref('1')
             border-radius: 10px;
             padding: 10px 0px;
             border: 1px solid #fff;
-
+            cursor: pointer;
             &:hover {
                 border: 1px solid #00c451;
             }

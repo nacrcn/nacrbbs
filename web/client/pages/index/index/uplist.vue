@@ -17,21 +17,12 @@
                     </a-button>
                 </div>
             </div>
-               <a-spin :loading="loading" tip="正在加载" style="width: 100%;min-height: 300px;">
-<div class="content-box">
-                <UserBox v-for="value in ThreadsList" :key="value.id" :info="value"></UserBox>
-            </div>
-            <div class="Isno" style="  width: 100%;
-                background-color: #fff;
-                border-radius: 10px;" v-if="ThreadsList.length == 0">
-                <a-result :status="null" title="无内容" subtitle="哎呀，没有内容了">
-                    <template #icon>
-                        <IconFaceSmileFill />
-                    </template>
-                </a-result>
-            </div>
-               </a-spin>
-            
+            <FlexBox :data="ThreadsList" :columns="3" :gap="10" :loading="loading">
+                <template #item="{ item }">
+                    <UserBox :info="item"></UserBox>
+                </template>
+            </FlexBox>
+
             <div class="PageNav">
                 <a-pagination @change="GetThreads" @page-size-change="GetThreads" v-model:current="from.page"
                     v-model:pageSize="from.pagesize" :total="from.total" size="mini" show-total />
@@ -46,7 +37,7 @@
                 <BoxTitle>热门话题</BoxTitle>
                 <TopicItem v-for="value in TopicList" :key="value.n_name" :data="value"></TopicItem>
             </div>
-             <div class="NavBar">
+            <div class="NavBar">
                 <NeedStar></NeedStar>
             </div>
         </div>
@@ -95,7 +86,7 @@ const GetTopicList = async () => {
 const ThreadsList = ref([])
 const from = ref({
     page: 1,
-    pagesize: 10,
+    pagesize: 9,
     total: 0,
     search: ''
 })
@@ -103,7 +94,7 @@ const loading = ref(false)
 const GetThreads = async () => {
     try {
         loading.value = true
-    
+
         const res = await useApiFetch().post('/api/GetUser', from.value)
         if (res.code == 200) {
             ThreadsList.value = res.data
@@ -126,7 +117,6 @@ onMounted(() => {
 
 
 <style lang="scss" scoped>
-
 /* 视口大于768px时的样式 */
 @media (min-width: 768px) {
     .MainBox {
@@ -141,6 +131,7 @@ onMounted(() => {
                 padding: 10px;
                 background-color: #fff;
                 border-radius: 10px;
+                margin-bottom: 10px;
 
                 .select {
                     margin-top: 10px;
@@ -165,18 +156,6 @@ onMounted(() => {
 
             }
 
-
-            .content-box {
-                width: calc(100%);
-                margin-top: 10px;
-                column-count: 3;
-                column-gap: 10px;
-
-                :deep(.Itemlist) {
-                    break-inside: avoid;
-                    margin-bottom: 10px;
-                }
-            }
 
             .PageNav {
                 width: calc(100% - 20px);
@@ -234,12 +213,13 @@ onMounted(() => {
         .MainContent {
             width: calc(100%);
 
-          
+
             .TopB {
                 width: calc(100% - 20px);
                 padding: 10px;
                 background-color: #fff;
                 border-radius: 10px;
+                margin-bottom: 10px;
 
                 .select {
                     margin-top: 10px;
@@ -263,17 +243,6 @@ onMounted(() => {
                 }
 
             }
-            .content-box {
-                width: calc(100%);
-                margin-top: 10px;
-                column-count: 1;
-                column-gap: 10px;
-
-                :deep(.Itemlist) {
-                    break-inside: avoid;
-                    margin-bottom: 10px;
-                }
-            }
 
             .PageNav {
                 width: calc(100% - 20px);
@@ -284,8 +253,6 @@ onMounted(() => {
                 background-color: #fff;
                 justify-content: center;
             }
-
-
         }
 
         .SidebarRight {

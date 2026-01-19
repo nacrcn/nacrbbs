@@ -41,7 +41,6 @@ const ChangeNav = (value) => {
     emit('update:modelValue', value)
     emit('change', value)
 
-    /* 动态绑定 */
 
 }
 </script>

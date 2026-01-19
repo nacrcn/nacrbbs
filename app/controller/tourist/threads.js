@@ -67,13 +67,16 @@ export default {
         }
         let ordeSql = ``
         if (pre.cid) {
-            ordeSql = `and id in (select n_tid from n_tclist where n_cid = ${pre.cid} and n_type = 1)`
+            ordeSql = ` and id in (select n_tid from n_tclist where n_cid = ${pre.cid} and n_type = 1)`
         }
         if (pre.cidt) {
-            ordeSql = `and id in (select n_tid from n_tclist where n_cid = ${pre.cidt} and n_type = 2)`
+            ordeSql = ` and id in (select n_tid from n_tclist where n_cid = ${pre.cidt} and n_type = 2)`
         }
         if (pre.isMyLike) {
             ordeSql += ` and n_uid in (select n_tid from n_user_like where n_uid = ${Ware.id || 0})`
+        }
+        if(pre.ismy){
+            ordeSql += ` and n_uid = ${Ware.id || 0}`
         }
         const SqlBuilder = new global.SqlBuilder();
         const sql = SqlBuilder
@@ -148,13 +151,19 @@ export default {
     /* 获取评论列表 */
     GetComments: (request, reply) => global.Fun(reply, async () => {
         const pre = request.body;
+        const Ware = request.Ware;
         /* 获取评论列表 */
         const SqlBuilder = new global.SqlBuilder();
+        let ordeSql = ``
+         if(pre.ismy){
+            ordeSql += ` and n_uid = ${Ware.id || 0}`
+        }
+
         const sql = SqlBuilder
             .add('n_tid', pre.id)
             .add('n_uid', pre.uid)
             .build();
-        const res = await global.db.getPaginatedData('n_comment', sql.sql, sql.params, ['id', 'desc'], pre.page, pre.pagesize)
+        const res = await global.db.getPaginatedData('n_comment', sql.sql + ordeSql, sql.params, ['id', 'desc'], pre.page, pre.pagesize)
         /* 获取用户信息 */
         let Userid = []
         let Tid = []

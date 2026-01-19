@@ -15,6 +15,12 @@
                 }]" @click="goPage('/user/home', 1)">
                     <p>我的信息</p>
                 </div>
+                 <div :class="['Item', {
+
+                    active: Key === 2
+                }]" @click="goPage('/user/myInfo', 2)">
+                    <p>我的动态</p>
+                </div>
                 <div :class="['Item', {
                     active: Key === 3
                 }]" @click="goPage('/user/bill', 3)">
@@ -170,6 +176,7 @@ const goPage = (path, key) => {
         width: calc(100% - 200px);
         overflow: hidden;
         overflow-y: auto;
+        height: calc(100vh - 110px);
     }
 
 

@@ -194,6 +194,13 @@ const DelThreads = async () => {
         Message.error(error.message)
     }
 }
+
+/* 深度监听data */
+watch(() => props.data, (newVal, oldVal) => {
+    if (newVal) {
+        props.data = newVal
+    }
+}, { immediate: true, deep: true })
 </script>
 
 <style lang="scss" scoped>

@@ -64,37 +64,23 @@
                     ]" v-model:modelValue="ShowIndex"></NavBox>
                 </div>
                 <div v-if="ShowIndex === '1'">
-                    <div class="content-box">
-                        <ItemA v-for="value in ThreadsList" :key="value.id" :data="value"></ItemA>
-                    </div>
-                    <div class="Isno" style="  width: 100%;
-                background-color: #fff;
-                border-radius: 10px;" v-if="ThreadsList.length == 0">
-                        <a-result :status="null" title="无内容" subtitle="哎呀，没有内容了">
-                            <template #icon>
-                                <IconFaceSmileFill />
-                            </template>
-                        </a-result>
-                    </div>
+                    <FlexBox :data="ThreadsList" :columns="2" :gap="10" :loading="loading">
+                        <template #item="{ item }">
+                            <ItemA :data="item"></ItemA>
+                        </template>
+                    </FlexBox>
                     <div class="PageNav">
                         <a-pagination @change="GetThreads" @page-size-change="GetThreads" v-model:current="from.page"
                             v-model:pageSize="from.pagesize" :total="from.total" size="mini" show-total />
                     </div>
                 </div>
                 <div v-if="ShowIndex === '2'">
-                    <div class="content-box">
-                        <CommentItem v-for="value in CommentList" :key="value.id" :data="value"
-                            @reload="GetCommentList"></CommentItem>
-                    </div>
-                    <div class="Isno" style="  width: 100%;
-                background-color: #fff;
-                border-radius: 10px;" v-if="CommentList.length == 0">
-                        <a-result :status="null" title="无内容" subtitle="哎呀，没有内容了">
-                            <template #icon>
-                                <IconFaceSmileFill />
-                            </template>
-                        </a-result>
-                    </div>
+                    <FlexBox :data="CommentList" :columns="2" :gap="10" :loading="loading">
+                        <template #item="{ item }">
+                            <CommentItem :data="item" @reload="GetCommentList">
+                            </CommentItem>
+                        </template>
+                    </FlexBox>
                     <div class="PageNav">
                         <a-pagination @change="GetCommentList" @page-size-change="GetCommentList"
                             v-model:current="GetCommentsFrom.page" v-model:pageSize="GetCommentsFrom.pagesize"
@@ -181,14 +167,17 @@ const from = ref({
     total: 0,
     uid: id
 })
+const loading = ref(false)
 const GetThreads = async () => {
     try {
+        loading.value = true
         const res = await useApiFetch().post('/api/GetThreads', from.value)
         if (res.code == 200) {
             ThreadsList.value = res.data
             from.value.total = res.total
         } else {
         }
+        loading.value = false
     } catch (error) {
         Message.error(error.message)
     }
@@ -204,12 +193,14 @@ const GetCommentsFrom = ref({
 const CommentList = ref([])
 const GetCommentList = async () => {
     try {
+        loading.value = true
         const res = await useApiFetch().post('/api/GetComments', GetCommentsFrom.value)
         if (res.code == 200) {
             CommentList.value = res.data
             GetCommentsFrom.value.total = res.total
         } else {
         }
+        loading.value = false
     } catch (error) {
         Message.error(error.message)
     }

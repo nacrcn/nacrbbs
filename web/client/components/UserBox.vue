@@ -44,6 +44,26 @@ const route = useRoute()
 const props = defineProps(['id', 'info'])
 let id = props.id
 const Users = ref({})
+
+
+
+/* 监听id */
+
+watch(() => props.id, (newVal, oldVal) => {
+    id = newVal
+    if (newVal) {
+        GetUser()
+    }
+}, { immediate: true, deep: true })
+
+/* 监听info */
+watch(() => props.info, (newVal, oldVal) => {
+    if (newVal) {
+        Users.value = newVal
+        id = newVal.id
+    }
+}, { immediate: true, deep: true })
+
 /* 获取用户信息 GetUser */
 const GetUser = async () => {
     try {

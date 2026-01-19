@@ -18,21 +18,12 @@
                     </a-button>
                 </div>
             </div>
-            <a-spin :loading="loading" tip="正在加载" style="width: 100%;min-height: 300px;">
-                <div class="content-box">
-                    <ItemA v-for="value in ThreadsList" :key="value.id" :data="value"></ItemA>
-                </div>
-
-                <div class="Isno" style="  width: 100%;
-                background-color: #fff;
-                border-radius: 10px;" v-if="ThreadsList.length == 0 && !loading">
-                    <a-result :status="null" title="无内容" subtitle="哎呀，没有内容了">
-                        <template #icon>
-                            <IconFaceSmileFill />
+             <FlexBox :data="ThreadsList" :columns="2" :gap="10" :loading="loading">
+                        <template #item="{ item }">
+                            <ItemA :data="item"></ItemA>
                         </template>
-                    </a-result>
-                </div>
-            </a-spin>
+                    </FlexBox>
+           
             <div class="PageNav">
                 <a-pagination @change="GetThreads" @page-size-change="GetThreads" v-model:current="from.page"
                     v-model:pageSize="from.pagesize" :total="from.total" size="mini" show-total />
@@ -140,6 +131,7 @@ onMounted(() => {
                 padding: 10px;
                 background-color: #fff;
                 border-radius: 10px;
+                margin-bottom: 10px;
             }
 
             .TopBox {
@@ -155,18 +147,6 @@ onMounted(() => {
                     border-radius: 7px;
                     margin-left: 10px;
                     background-color: rgb(0, 209, 129);
-                }
-            }
-
-            .content-box {
-                width: calc(100%);
-                margin-top: 10px;
-                column-count: 2;
-                column-gap: 10px;
-
-                :deep(.Itemlist) {
-                    break-inside: avoid;
-                    margin-bottom: 10px;
                 }
             }
 
@@ -232,6 +212,7 @@ onMounted(() => {
                 padding: 10px;
                 background-color: #fff;
                 border-radius: 10px;
+                margin-bottom: 10px;
             }
 
             .TopBox {
@@ -250,18 +231,7 @@ onMounted(() => {
                 }
             }
 
-            .content-box {
-                width: calc(100%);
-                margin-top: 10px;
-                column-count: 1;
-                column-gap: 10px;
-
-                :deep(.Itemlist) {
-                    break-inside: avoid;
-                    margin-bottom: 10px;
-                }
-            }
-
+         
             .PageNav {
                 width: calc(100% - 20px);
                 margin-top: 10px;
