@@ -38,13 +38,26 @@
 import { ref, onMounted } from 'vue'
 import { Message } from '@arco-design/web-vue';
 const UserInfo = useUserInfo()
-
-const route = useRoute()
-
 const props = defineProps(['id', 'info'])
 let id = props.id
 const Users = ref({})
 
+
+/* 获取用户信息 GetUser */
+const GetUser = async () => {
+    try {
+        const res = await useApiFetch().post('/api/GetUser', {
+            id: id
+        })
+        if (res.code == 200) {
+            Users.value = res.data
+        } else {
+            Message.error(res.message || '获取用户信息失败')
+        }
+    } catch (error) {
+        Message.error(error.message)
+    }
+}
 
 
 /* 监听id */
@@ -63,22 +76,6 @@ watch(() => props.info, (newVal, oldVal) => {
         id = newVal.id
     }
 }, { immediate: true, deep: true })
-
-/* 获取用户信息 GetUser */
-const GetUser = async () => {
-    try {
-        const res = await useApiFetch().post('/api/GetUser', {
-            id: id
-        })
-        if (res.code == 200) {
-            Users.value = res.data
-        } else {
-            Message.error(res.message || '获取用户信息失败')
-        }
-    } catch (error) {
-        Message.error(error.message)
-    }
-}
 
 
 onMounted(() => {
