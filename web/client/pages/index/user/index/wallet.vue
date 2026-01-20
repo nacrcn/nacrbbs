@@ -21,16 +21,10 @@
                 <div class="content">
                     <div class="Item" v-if="SiteConfig.$state.Config.n_wallet_topup_off === '1'"
                         @click="navigateTo('/user/topup')">
-                        <image class="icon" src="https://imgsbad.semoun.com/uploads/2025/12/18/69437043db1e5.png"
-                            mode="">
-                        </image>
                         <div class="title">余额充值</div>
                     </div>
                     <div class="Item" v-if="SiteConfig.$state.Config.n_wallet_withdraw_off === '1'"
                         @click="navigateTo('/user/withdraw')">
-                        <image class="icon" src="https://imgsbad.semoun.com/uploads/2025/12/18/6943708b848aa.png"
-                            mode="">
-                        </image>
                         <div class="title">余额提现</div>
                     </div>
                 </div>

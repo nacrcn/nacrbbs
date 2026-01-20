@@ -34,7 +34,7 @@ export const useUserInfo = defineStore('UserInfo', {
       } else {
         CallBack(false)
         this.UserInfo = {
-          n_avatar: 'https://imgsbad.semoun.com/uploads/2025/12/16/69411eb600dc1.png',
+          n_avatar: 'https://q7.itc.cn/q_70/images03/20241119/7243e2d9d1a0434ab2c56bca7153c0d8.jpeg',
         }
       }
     }

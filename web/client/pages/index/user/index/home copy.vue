@@ -128,9 +128,6 @@ const getActivity = async () => {
 
 /* 论坛详情 */
 const TBBSInfo = ref({})
-/* 
-{ "id": 3, "n_nickname": "小豆子", "n_avatar": "https://api.bbs.nacr.cn/public/upload/img_1768640751076_qeutzb.jpg", "n_username": "21089086@qq.com", "n_password": "pbkdf2$10$1c57b4b22437d8ed165c903667759a2c$71b86c3791dc05362c4458e4c337b56499f0165c22b5e5642bcbabdfb223f4d468d59e3f6eda11a836fc65b5eb01d9dd1d9319a193950ec5d9b48b057b46bc60", "n_userback": "https://imgsbad.semoun.com/uploads/2024/12/23/6768fc9e4e262.png", "n_registertime": "2025-12-11 14:12:54", "n_points": "255.00", "n_signature": "这家伙很懒，什么都没留下", "n_encoding": "JSH02N3", "n_group_id": 3, "n_group_time": "2026-02-07 16:30:41", "n_growth_value": "0", "n_gender": "1", "n_ipone": "null", "n_qqnumber": "21089086", "n_wxnumber": "rsrx9595", "n_balance": "72.00", "n_MiniProgramOpenid": "oGNPJ65cSGc_SBpZY2S1XFs_rHHU", "n_black": "null", "n_administrator": "1", "posts": 6, "followers": 2, "following": 0, "n_comment": 3, "isLiked": false }
-*/
 const getinfo = async () => {
      const res = await useApiFetch().post('/api/GetUser',{
         id:UserInfo.$state.UserInfo.id
