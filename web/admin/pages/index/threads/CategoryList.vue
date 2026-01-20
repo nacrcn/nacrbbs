@@ -8,7 +8,7 @@
                         <a-input v-model="GetFrom.search" placeholder="模糊搜索" allow-clear />
                         <a-button type="primary" @click="GetUserList()">检索</a-button>
                         <a-button type="primary"
-                            @click="visible = true, type = 1, info = { type: GetFrom.type }">新增分类</a-button>
+                            @click="visible = true, type = 1, info = { n_type: GetFrom.type }">新增分类</a-button>
                     </a-space>
                 </template>
 
@@ -164,6 +164,10 @@ const type = ref(1)
 /* 编辑用户信息 edituserinfo */
 const editUserInfo = async () => {
     let res;
+
+    if(info.value.n_sort == '' || info.value.n_sort == undefined || info.value.n_sort == null || info.value.n_sort == 'null') {
+        info.value.n_sort = 0
+    }
     if (type.value == 1) {
         res = await useApiFetch().post('/api/addCategoryAdmin', info.value)
     } else {

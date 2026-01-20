@@ -4,7 +4,7 @@
             <a-page-header title="用户管理" :show-back="false">
                 <template #subtitle>
                     <a-space>
-                        
+
                         <a-input v-model="GetFrom.search" placeholder="模糊搜索" allow-clear />
                         <a-button type="primary" @click="GetUserList()">检索</a-button>
                         <!-- <a-button type="primary" @click="navigateTo('/app/Create/add')">发布应用</a-button> -->
@@ -58,9 +58,9 @@
                         </a-space>
                     </template>
                     <template #footer>
-                        <a-pagination @change="GetUserList" @page-size-change="GetUserList" v-model:current="GetFrom.page"
-                            v-model:pageSize="GetFrom.pagesize" :total="GetFrom.total" size="mini" show-total
-                            show-page-size :page-size-options="[50, 100, 200, 500, 1000]" />
+                        <a-pagination @change="GetUserList" @page-size-change="GetUserList"
+                            v-model:current="GetFrom.page" v-model:pageSize="GetFrom.pagesize" :total="GetFrom.total"
+                            size="mini" show-total show-page-size :page-size-options="[50, 100, 200, 500, 1000]" />
                     </template>
                 </a-table>
             </div>
@@ -93,15 +93,21 @@
                     <a-form-item field="post" label="积分">
                         <a-input v-model="info.n_points" placeholder="请输入" />
                     </a-form-item>
-                     <a-form-item field="post" label="余额">
+                    <a-form-item field="post" label="余额">
                         <a-input v-model="info.n_balance" placeholder="请输入" />
                     </a-form-item>
                     <a-form-item field="post" label="编码">
                         <a-input v-model="info.n_encoding" placeholder="请输入" />
                     </a-form-item>
-       
-
-
+                    <a-form-item field="post" label="会员">
+                        <a-select class="road" v-model="form.n_group_id" placeholder="请选择">
+                            <a-option :value="value.id" v-for="value in usergroupList">{{ value.n_name }}</a-option>
+                        </a-select>
+                    </a-form-item>
+                    <a-form-item field="post" label="到期时间">
+                        <a-date-picker show-time :time-picker-props="{ defaultValue: '09:09:06' }" v-model="info.n_group_time"
+                            format="YYYY-MM-DD HH:mm:ss" />
+                    </a-form-item>
                 </a-form>
             </div>
         </a-drawer>
@@ -142,7 +148,7 @@ const columns = [
         ellipsis: true,
         tooltip: true,
     },
-{
+    {
         title: '邮箱',
         dataIndex: 'n_username',
         width: 150,
@@ -199,14 +205,31 @@ const editUserInfo = async () => {
         GetUserList()
     } else {
         Message.error(res.msg)
-    }   
-        
+    }
+
 }
 
+/* 获取用户会员列表 */
+const usergroupList = ref([])
+
+const usergroup = async () => {
+    loading.value = true
+    const res = await useApiFetch().post('/api/usergroup', {
+        page: 1,
+        pagesize: 20,
+    })
+    if (res.code === 200) {
+        usergroupList.value = res.data
+    } else {
+        Message.error(res.msg)
+    }
+    loading.value = false
+}
 
 
 onMounted(() => {
     GetUserList()
+    usergroup()
 })
 </script>
 
