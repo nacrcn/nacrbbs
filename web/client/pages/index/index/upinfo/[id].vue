@@ -16,7 +16,15 @@
                                 <img :src="Users.n_avatar" alt="">
                             </div>
                             <div class="UserInfos">
-                                <p class="nickname">{{ Users.n_nickname }}</p>
+                                <div class="UserInfoBox">
+                <p class="nickname">
+                    {{ Users?.n_nickname }}
+                </p>
+                <a-tooltip v-for="(value, index) in Users?.medals || []" :key="index" :content="value.n_name"
+                    position="bottom">
+                    <img :src="value.n_src" alt="勋章" class="medal-icon" />
+                </a-tooltip>
+            </div>
                                 <p class="signature">{{ Users.n_signature }}</p>
                                 <!-- 关注按钮 -->
                                 <div class="Follow" v-if="UserInfo.$state.UserInfo?.id !== Users.id">
@@ -284,10 +292,21 @@ const ShowIndex = ref('1')
                             position: relative;
                             width: calc(100% - 90px);
 
-                            .nickname {
-                                font-weight: 800;
+                              .UserInfoBox {
+                                display: flex;
+                                gap: 3px;
+                                margin-top: 10px;
+
+                                .nickname {
+                                    font-weight: 800;
                                 font-size: 19px;
+                                }
+
+                                .medal-icon {
+                                    height: 20px;
+                                }
                             }
+
 
                             .signature {
                                 margin-top: 5px;

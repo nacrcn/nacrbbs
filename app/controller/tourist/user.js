@@ -34,6 +34,17 @@ export default {
                 thread.isLiked = isLiked[0]['COUNT(*)'] > 0;
             }
 
+            /* 获取用户勋章 */
+            const medals = await global.db.query(`
+                SELECT m.*
+                FROM n_medal_log ml
+                LEFT JOIN n_medal m ON ml.n_mid = m.id
+                WHERE ml.n_uid = ?
+            `, [thread.id]);
+
+            thread.medals = medals;
+            
+
             global.sendMsg(reply, 200, '获取成功', thread);
             return;
         }
@@ -126,6 +137,37 @@ export default {
                 });
             }
         }
+
+        /* 获取用户勋章 */
+        if (res.data && res.data.length > 0) {
+            const userIds = res.data.map(user => user.id);
+            const userMedals = await global.db.query(`
+                SELECT ml.n_uid, m.*
+                FROM n_medal_log ml
+                LEFT JOIN n_medal m ON ml.n_mid = m.id
+                WHERE ml.n_uid IN (${userIds.map(() => '?').join(',')})
+            `, userIds);
+
+            const medalsMap = {};
+            userMedals.forEach(item => {
+                if (!medalsMap[item.n_uid]) {
+                    medalsMap[item.n_uid] = [];
+                }
+                medalsMap[item.n_uid].push({
+                    id: item.id,
+                    n_name: item.n_name,
+                    n_src: item.n_src,
+                    n_type: item.n_type,
+                    n_threshold: item.n_threshold,
+                    n_sort: item.n_sort
+                });
+            });
+
+            res.data.forEach(user => {
+                user.medals = medalsMap[user.id] || [];
+            });
+        }
+
 
         global.sendMsg(reply, 200, '获取成功', res.data, res.total);
     })

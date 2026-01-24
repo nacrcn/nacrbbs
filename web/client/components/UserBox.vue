@@ -5,9 +5,16 @@
             <div :style="{ backgroundImage: `url(${Users?.n_userback})` }" class="UserBack">
 
             </div>
-            <img :src="Users.n_avatar" alt="用户头像" />
-            <p class="nickname">{{ Users?.n_nickname }}</p>
-
+            <img class="avatar" :src="Users.n_avatar" alt="用户头像" />
+            <div class="UserInfoBox">
+                <p class="nickname">
+                    {{ Users?.n_nickname }}
+                </p>
+                <a-tooltip v-for="(value, index) in Users?.medals || []" :key="index" :content="value.n_name"
+                    position="bottom">
+                    <img :src="value.n_src" alt="勋章" class="medal-icon" />
+                </a-tooltip>
+            </div>
             <div class="UserDetail">
                 <div class="Item">
                     <p class="Value">{{ Users?.posts || 0 }}</p>
@@ -125,7 +132,7 @@ const LikeUser = async () => {
         background-position: center;
     }
 
-    img {
+    .avatar {
         width: 70px;
         height: 70px;
         border-radius: 50%;
@@ -135,12 +142,22 @@ const LikeUser = async () => {
         display: block;
     }
 
-    .nickname {
-        text-align: center;
-        font-size: 15px;
-        color: #333;
-        margin-top: 10px;
+    .UserInfoBox {
+        display: flex;
+        gap:3px;
+        justify-content: center;
+            margin-top: 10px;
+        .nickname {
+            text-align: center;
+            font-size: 15px;
+            color: #333;
+        }
+
+        .medal-icon {
+            height: 20px;
+        }
     }
+
 
     .UserDetail {
         display: flex;

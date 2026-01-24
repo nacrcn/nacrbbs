@@ -3,7 +3,7 @@
     <div class="Itemlist" @click="navigateTo('/threads/' + data.id)">
         <!-- 按钮部分 -->
         <div class="ButtonSection">
-            <a-button  @click.stop="PopShow = true">
+            <a-button @click.stop="PopShow = true">
                 <template #icon>
                     <icon-more />
                 </template>
@@ -11,32 +11,35 @@
         </div>
         <div class="UserInfo">
             <div class="Avatar">
-                <img :src="data.user?.n_avatar" alt="">
+                <Lazimg class="AvatarImg" :src="Users?.n_avatar" alt="" />
+                <!-- <img :src="Users?.n_avatar" alt=""> -->
             </div>
             <div class="UserDetail">
-                <p class="nickname">{{data.user?.n_nickname}}</p>
-                <p class="time">{{data.n_time}}</p>
+                <div class="UserInfoBox">
+                    <p class="nickname">
+                        {{ Users?.n_nickname }}
+                    </p>
+                    <a-tooltip v-for="(value, index) in Users?.medals || []" :key="index" :content="value.n_name"
+                        position="bottom">
+                        <img :src="value.n_src" alt="勋章" class="medal-icon" />
+                    </a-tooltip>
+                </div>
+                <p class="time">{{ data.n_time }}</p>
             </div>
         </div>
         <div class="Content">
             <div class="PostContent">
-                <p class="Title">{{data.n_name}}</p>
-                <p class="word">{{data.n_profile}}</p>
+                <p class="Title">{{ data.n_name }}</p>
+                <p class="word">{{ data.n_profile }}</p>
             </div>
-            <div :class="['ImageList',{
+            <div :class="['ImageList', {
                 one: data.n_resources && data.n_resources.length === 1,
                 two: data.n_resources && data.n_resources.length === 2
             }]">
                 <div v-for="value in data.n_resources" :key="value.url" class="media-item">
-                    <img
-                        v-if="value.type === 1"
-                        :src="value.url"
-                        alt=""
-                        :class="{ 'loaded': imageLoadedStates[value.url] }"
-                        @load="handleImageLoad(value.url)"
-                        @error="handleImageError(value.url)"
-                        loading="lazy"
-                    />
+                    <img v-if="value.type === 1" :src="value.url" alt=""
+                        :class="{ 'loaded': imageLoadedStates[value.url] }" @load="handleImageLoad(value.url)"
+                        @error="handleImageError(value.url)" loading="lazy" />
                     <div v-if="value.type === 2" class="video-container">
                         <video :src="value.url"></video>
                         <div class="play-button">
@@ -50,7 +53,7 @@
                 <div class="Category">
                     <a-space wrap>
                         <div class="Tag" v-for="value in data.category" :key="value">
-                           <span v-if="value.n_type == 2">#</span>
+                            <span v-if="value.n_type == 2">#</span>
                             {{ value.n_name }}
                         </div>
                     </a-space>
@@ -59,25 +62,25 @@
             <div class="Interactions">
                 <span class="item">
                     <icon-eye class="icon" />
-                    <span>{{formatNumber(data.n_read || 0)}}</span>
+                    <span>{{ formatNumber(data.n_read || 0) }}</span>
                 </span>
                 <span class="item">
                     <icon-message class="icon" />
-                    <span>{{formatNumber(data.n_msgs || 0)}}</span>
+                    <span>{{ formatNumber(data.n_msgs || 0) }}</span>
                 </span>
                 <span class="item">
                     <icon-thumb-up class="icon" />
-                    <span>{{formatNumber(data.n_starts || 0)}}</span>
+                    <span>{{ formatNumber(data.n_starts || 0) }}</span>
                 </span>
             </div>
         </div>
 
-         <!-- 操作框 -->
+        <!-- 操作框 -->
         <popupMob v-model:modelValue="PopShow" :Title="'操作'" Nook>
             <template #content>
                 <a-space wrap>
-                    <a-button @click="navigateTo('/threadInfo/' + data.id)" v-if="UserInfo.$state.UserInfo?.id == data.n_uid"
-                        style="border-radius: 20px;">
+                    <a-button @click="navigateTo('/threadInfo/' + data.id)"
+                        v-if="UserInfo.$state.UserInfo?.id == data.n_uid" style="border-radius: 20px;">
                         <template #icon>
                             <icon-edit />
                         </template>
@@ -194,11 +197,28 @@ const DelThreads = async () => {
         Message.error(error.message)
     }
 }
+/* 获取用户信息 GetUser */
+const Users = ref({})
+const GetUser = async () => {
+    try {
+        const res = await useApiFetch().post('/api/GetUser', {
+            id: props.data.n_uid
+        })
+        if (res.code == 200) {
+            Users.value = res.data
+        } else {
+            Message.error(res.message || '获取用户信息失败')
+        }
+    } catch (error) {
+        Message.error(error.message)
+    }
+}
 
 /* 深度监听data */
 watch(() => props.data, (newVal, oldVal) => {
     if (newVal) {
         props.data = newVal
+        GetUser()
     }
 }, { immediate: true, deep: true })
 </script>
@@ -212,7 +232,7 @@ watch(() => props.data, (newVal, oldVal) => {
     cursor: pointer;
     position: relative;
 
-    .ButtonSection{
+    .ButtonSection {
         position: absolute;
         right: 10px;
         top: 10px;
@@ -225,10 +245,11 @@ watch(() => props.data, (newVal, oldVal) => {
             width: 60px;
             margin: 5px;
 
-            img {
+            .AvatarImg {
                 width: 50px;
                 height: 50px;
                 border-radius: 50%;
+                overflow: hidden;
             }
         }
 
@@ -241,6 +262,21 @@ watch(() => props.data, (newVal, oldVal) => {
                 color: #000000;
                 font-size: 16px;
                 font-weight: 800;
+            }
+
+            .UserInfoBox {
+                display: flex;
+                gap: 3px;
+
+                .nickname {
+                    color: #000000;
+                    font-size: 16px;
+                    font-weight: 800;
+                }
+
+                .medal-icon {
+                    height: 20px;
+                }
             }
 
             .time {
@@ -335,10 +371,11 @@ watch(() => props.data, (newVal, oldVal) => {
             }
         }
 
-        .one{
+        .one {
             grid-template-columns: 1fr;
         }
-        .two{
+
+        .two {
             grid-template-columns: 1fr 1fr;
         }
 

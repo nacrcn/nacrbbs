@@ -259,6 +259,15 @@ export default async function (router) {
         await open.post('/GetIndexStatistics', 'Admin/Frame/Statistics/index@GetIndexStatistics');
         /* 获取综合趋势数据 */
         await open.post('/GetComprehensiveTrend', 'Admin/Frame/Statistics/index@GetComprehensiveTrend');
+
+        /* 获取勋章 getMedal */
+        await open.post('/getMedal', 'Admin/medal@getMedal');
+        /* 新增勋章 addMedal */
+        await open.post('/addMedal', 'Admin/medal@addMedal');
+        /* 编辑勋章 editMedal */
+        await open.post('/editMedal', 'Admin/medal@editMedal');
+        /* 删除勋章 delMedal */
+        await open.post('/delMedal', 'Admin/medal@delMedal');
       
     })
 }

@@ -1,3 +1,5 @@
+import AssignMedal from "../medal.js";
+
 /* 对内 获取用户会员信息函数 */
 const getVipInfo = async (id) => {
     let groupInfo = {};
@@ -145,7 +147,7 @@ export default {
             n_tid: pre.id,
             n_uid: Ware.id,
         });
-
+        AssignMedal.AssignMedal(pre.id)
         global.sendMsg(reply, 200, '关注成功');
     }),
 }

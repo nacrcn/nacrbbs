@@ -1,3 +1,4 @@
+import AssignMedal from "./medal.js";
 export default {
     /*  */
     AddThreads: (request, reply) => global.Fun(reply, async () => {
@@ -54,6 +55,7 @@ export default {
         } catch (error) {
             console.log(error);
         }
+        AssignMedal.AssignMedal(Ware.id)
         global.sendMsg(reply, 200, '操作成功');
     }),
     /* 编辑贴贴 */
@@ -161,6 +163,7 @@ export default {
 
         /* 更新帖子点赞数 */
         await global.db.query('UPDATE n_threads SET n_starts = n_starts + 1 WHERE id = ?', [pre.id]);
+        AssignMedal.AssignMedal(Threads[0].n_uid)
 
         global.sendMsg(reply, 200, '点赞成功');
     }),
@@ -193,6 +196,7 @@ export default {
         /* 写入评论数量 */
         await global.db.query('UPDATE n_threads SET n_msgs = n_msgs + 1,n_msglastTime = ? WHERE id = ?', [new Date(), pre.id])
         global.sendMsg(reply, 200, '评论成功');
+        AssignMedal.AssignMedal(Ware.id)
 
     }),
 
