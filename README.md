@@ -34,6 +34,20 @@
 > 这是初始第一版，可能存在很多BUG，欢迎提交反馈，我会在空闲时间进行优化更新
 
 ![赞赏](https://imgsbad.semoun.com/uploads/2026/01/17/696b433eb9417.jpg)
+## 🤝 赞赏名单
+
+感谢以下赞赏者对本项目的支持，你们的支持是我们持续更新的动力！
+
+<div align="center">
+
+| 头像 | 昵称 | 赞赏内容 | 赞赏时间 | 大佬网站 | 备注 |
+|:----:|------|----------|----------|----------|------|
+| <img src="https://imgsbad.semoun.com/uploads/2026/01/24/69743939be359.jpg" width="48" height="48" style="border-radius: 50%;"> | **欧内撒嘛** | 💰 20 元 | 2025-01-18 | - | |
+
+</div>
+
+> 📝 赞赏者列表持续更新中...  
+> 💖 每一笔赞赏都是对我们最大的鼓励和支持！
 
 ---
 
@@ -60,41 +74,8 @@ Nacr 是采用前后端分离架构打造的全新轻量化论坛系统，界面
 
 ![前台界面](https://imgsbad.semoun.com/uploads/2026/01/18/696c9ac53670e.png)
 
-### 后台管理
-
-![数据统计](https://imgsbad.semoun.com/uploads/2026/01/17/696af3521b9f3.png)
-![用户管理](https://imgsbad.semoun.com/uploads/2026/01/17/696af3708277f.png)
-![内容管理](https://imgsbad.semoun.com/uploads/2026/01/17/696af383e2221.png)
-![系统设置](https://imgsbad.semoun.com/uploads/2026/01/17/696af3af2a792.png)
-![其他功能](https://imgsbad.semoun.com/uploads/2026/01/17/696af3d1b4d3a.png)
-
 ---
 
-## 🚀 功能特性
-
-### 用户端功能
-- 👤 用户注册/登录（支持邮箱验证码、微信小程序）
-- 📝 帖子发布/编辑/删除
-- 💬 评论互动、点赞功能
-- 👥 关注用户、私信系统
-- 📅 签到系统、积分奖励
-- 💳 会员充值、订单管理
-- 💰 积分转账、余额提现
-- 🔔 个人消息通知
-- 🔍 内容搜索、分类浏览
-
-### 管理端功能
-- 📊 数据统计与趋势分析
-- 👥 用户管理与用户组设置
-- 📰 公告管理、轮播图配置
-- 📂 分类管理、内容审核
-- 💸 支付方式配置、订单管理
-- 🎨 站点设置、导航管理
-- 📧 邮件模板配置
-- 🎁 活动管理、营销工具
-- ⚙️ 系统配置与权限管理
-
----
 
 ## 🛠️ 技术栈
 
@@ -202,6 +183,12 @@ npm run dev
 
 ---
 
+## 📦 详细的图文教程
+
+[NacrBBS编译教程](https://bbs.nacr.cn/threads/49)
+
+[NacrBBS全开源系统 - 宝塔面板搭建教程](https://bbs.nacr.cn/threads/46)
+
 ## 📁 项目结构
 
 ```
@@ -225,33 +212,16 @@ nacrbbs/
 └── index.js             # 后端入口文件
 ```
 
----
-
-## 🔧 配置说明
-
-### 邮件配置
-
-在管理后台配置 SMTP 邮件服务器信息，用于发送验证码和通知邮件。
-
-### 支付配置
-
-系统支持多种支付方式，需要在管理后台配置支付接口信息。
 
 
 
 ---
 
-## 🤝 贡献指南
 
-欢迎贡献代码！请遵循以下步骤：
-
-1. Fork 本仓库
-2. 创建特性分支 (`git checkout -b feature/AmazingFeature`)
-3. 提交更改 (`git commit -m 'Add some AmazingFeature'`)
-4. 推送到分支 (`git push origin feature/AmazingFeature`)
-5. 开启 Pull Request
 
 ---
+
+
 
 ## 📄 开源协议
 
