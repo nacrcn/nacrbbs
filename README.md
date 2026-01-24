@@ -20,8 +20,6 @@
 - gitee项目地址：[https://gitee.com/wuaxcn/nacrbbs](https://gitee.com/wuaxcn/nacrbbs)
 - github项目地址：[https://github.com/nacrcn/nacrbbs](https://github.com/nacrcn/nacrbbs)
 - 演示站：[https://bbs.nacr.cn/](https://bbs.nacr.cn/)
-
-- 问题反馈：[Issues](https://gitee.com/wuaxcn/nacrbbs/issues)
 - QQ：21089086
 - 微信：rsrx9595
 - QQ群：893570125
@@ -31,7 +29,6 @@
 
 > 如果您有兴趣参与项目开发，欢迎联系我一起参与开发！若您有任何指点和改正意见，也欢迎提出！我们一起学习进步！
 
-> 这是初始第一版，可能存在很多BUG，欢迎提交反馈，我会在空闲时间进行优化更新
 
 ![赞赏](https://imgsbad.semoun.com/uploads/2026/01/17/696b433eb9417.jpg)
 ## 🤝 赞赏名单
@@ -42,7 +39,7 @@
 
 | 头像 | 昵称 | 赞赏内容 | 赞赏时间 | 大佬网站 | 备注 |
 |:----:|------|----------|----------|----------|------|
-| <img src="https://imgsbad.semoun.com/uploads/2026/01/24/69743939be359.jpg" width="48" height="48" style="border-radius: 50%;"> | **欧内撒嘛** | 💰 20 元 | 2025-01-18 | - | |
+| <img src="https://imgsbad.semoun.com/uploads/2026/01/24/69743939be359.jpg" width="48" height="48" style="border-radius: 50%;"> | **欧内撒嘛** | 💰 20 元 | 2026-01-18 | - | |
 
 </div>
 
@@ -212,14 +209,6 @@ nacrbbs/
 └── index.js             # 后端入口文件
 ```
 
-
-
-
----
-
-
-
----
 
 
 
