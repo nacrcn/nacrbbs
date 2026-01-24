@@ -4,7 +4,7 @@ export default {
     getMedal: (request, reply) => global.Fun(reply, async () => {
         const pre = request.body;
         const SqlBuilder = new global.SqlBuilder();
-        const sql = SqlBuilder.add('n_name', pre.seach, 'like').add('n_type', pre.type ?? 1).build();
+        const sql = SqlBuilder.add('n_name', pre.seach, 'like');
         const res = await global.db.getPaginatedData('n_medal', sql.sql, sql.params, ['n_sort', 'desc'], pre.page, pre.pagesize)
         global.sendMsg(reply, 200, '获取成功', res.data, res.total);
     }),
