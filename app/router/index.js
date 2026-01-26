@@ -126,6 +126,9 @@ export default async function (router) {
         /* 举报帖子 ReportThreads */
         await open.post('/ReportThreads', 'user/threads@ReportThreads');
 
+        /* 获取用户消息 GetMsgs */
+        await open.post('/GetMsgs', 'user/Frame/msg@GetMsgs');
+
 
     })
 
