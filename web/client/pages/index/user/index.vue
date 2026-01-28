@@ -9,29 +9,43 @@
 
         <div class="Page">
             <div>
-                <div class="Navlist">
-                <div :class="['Item', {
-                    active: Key === 1
-                }]" @click="goPage('/user/home', 1)">
-                    <p>我的信息</p>
-                </div>
-                 <div :class="['Item', {
+                <div :class="['Navlist', { 'nav-open': showMobileNav }]">
+                    <div :class="['Item', {
+                        active: Key === 1
+                    }]" @click="goPage('/user/home', 1)">
+                        <p>我的信息</p>
+                    </div>
+                    <div :class="['Item', {
 
-                    active: Key === 2
-                }]" @click="goPage('/user/myInfo', 2)">
-                    <p>我的动态</p>
+                        active: Key === 2
+                    }]" @click="goPage('/user/myInfo', 2)">
+                        <p>我的动态</p>
+                    </div>
+                    <div :class="['Item', {
+                        active: Key === 4
+                    }]" @click="goPage('/user/medal', 4)">
+                        <p>勋章中心</p>
+                    </div>
+                    <div :class="['Item', {
+                        active: Key === 3
+                    }]" @click="goPage('/user/bill', 3)">
+                        <p>我的账单</p>
+                    </div>
                 </div>
-                <div :class="['Item', {
-                    active: Key === 3
-                }]" @click="goPage('/user/bill', 3)">
-                    <p>我的账单</p>
-                </div>
-            </div>
+                <!-- 手机端侧边栏遮罩 -->
+                <div v-show="showMobileNav" class="mobile-overlay" @click="toggleMobileNav"></div>
             </div>
             <div class="Content">
                 <NuxtPage />
             </div>
         </div>
+
+        <!-- 手机端导航开关 -->
+        <div class="MobileNav" @click="toggleMobileNav">
+            <icon-menu />
+        </div>
+
+
     </div>
 
 </template>
@@ -64,6 +78,16 @@ const Key = ref(1)
 const goPage = (path, key) => {
     Key.value = key
     navigateTo(path)
+    // 手机端点击导航后自动关闭侧边栏
+    if (window.innerWidth <= 1024) {
+        showMobileNav.value = false
+    }
+}
+
+// 手机端导航控制
+const showMobileNav = ref(false)
+const toggleMobileNav = () => {
+    showMobileNav.value = !showMobileNav.value
 }
 
 </script>
@@ -143,7 +167,7 @@ const goPage = (path, key) => {
 
 .Page {
     width: 100%;
-    padding: 80px 0px 30px;
+    padding: 70px 0px 30px;
     position: relative;
     z-index: 12;
     max-width: 1280px;
@@ -185,11 +209,64 @@ const goPage = (path, key) => {
 /* 视口小于1024px时，隐藏导航栏 */
 @media (max-width: 1024px) {
     .Page .Navlist {
-        display: none;
+        position: fixed;
+        top: 70px;
+        left: -200px;
+        z-index: 8888;
+        transition: left 0.3s ease-in-out;
+        background-color: #fff;
+        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
     }
+
+    .Page .Navlist.nav-open {
+        left: 10px;
+    }
+
     .Page .Content {
         width: calc(100% - 20px);
         margin: 0 auto;
+    }
+
+    .MobileNav {
+        width: 35px;
+        height: 35px;
+        background-color: #fff;
+        position: fixed;
+        top: 17px;
+        left: 16px;
+        z-index: 100001;
+        border-radius: 10px;
+        line-height: 35px;
+        text-align: center;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        transition: all 0.3s;
+
+        &:hover {
+            background-color: #f0f0f0;
+        }
+    }
+
+    /* 手机端遮罩层 */
+    .mobile-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        z-index: 99;
+        animation: fadeIn 0.3s ease-in-out;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
     }
 }
 </style>

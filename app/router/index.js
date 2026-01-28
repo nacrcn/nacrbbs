@@ -128,6 +128,8 @@ export default async function (router) {
 
         /* 获取用户消息 GetMsgs */
         await open.post('/GetMsgs', 'user/Frame/msg@GetMsgs');
+        /* 获取勋章列表 getMedal */
+        await open.post('/getMedalList', 'user/medal@getMedal');
 
 
     })

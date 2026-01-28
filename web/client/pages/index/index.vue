@@ -31,6 +31,11 @@
             </div>
         </div>
 
+        <!-- 手机端导航 -->
+        <div class="MobileNav">
+            
+        </div>
+
     </div>
 </template>
 
@@ -249,6 +254,6 @@ const changeIndexShow = (index, path) => {
 
 
     }
-
+   
 }
 </style>

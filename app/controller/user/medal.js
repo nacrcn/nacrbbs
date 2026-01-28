@@ -66,5 +66,27 @@ export default {
                 });
             }
         }
-    }
+    },
+    /* 获取勋章列表 */
+     getMedal: (request, reply) => global.Fun(reply, async () => {
+        const pre = request.body;
+        const Ware = request.Ware;
+
+        const SqlBuilder = new global.SqlBuilder();
+        const sql = SqlBuilder.add('n_name', pre.seach, 'like');
+        const res = await global.db.getPaginatedData('n_medal', sql.sql, sql.params, ['n_sort', 'desc'], pre.page, pre.pagesize)
+        
+        /* 获取用户已获得的勋章 */
+        const userMedals = await global.db.query(`
+            SELECT n_mid FROM n_medal_log WHERE n_uid = ?
+        `, [Ware.id]);
+        const userMedalIds = new Set(userMedals.map(m => m.n_mid));
+        
+        /* 将用户已获得的勋章ID添加到结果中 */
+        res.data.forEach(medal => {
+            medal.isEarned = userMedalIds.has(medal.id);
+        });
+        
+        global.sendMsg(reply, 200, '获取成功', res.data, res.total);
+    }),
 }
