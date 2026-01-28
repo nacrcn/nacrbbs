@@ -177,10 +177,10 @@ export default {
             return global.sendMsg(reply, 404, '帖子不存在');
         }
 
-        if(!pre.n_html || pre.n_html.length < 1){
+        if (!pre.n_html || pre.n_html.length < 1) {
             return global.sendMsg(reply, 400, '评论内容不能为空');
         }
-     
+
 
         let from = {
             n_tid: pre.id,
@@ -237,8 +237,10 @@ export default {
             n_time: new Date()
         }
         console.log(report);
-        
+
         await global.db.insert('n_report', report);
         global.sendMsg(reply, 200, '举报成功');
-    })
+    }),
+
+  
 }

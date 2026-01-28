@@ -300,7 +300,6 @@ const GoUser = () => {
                         height: 35px;
                         margin-top: 2.5px;
                         cursor: pointer;
-                        margin-left: 30px;
                     }
 
                     .NavBox {

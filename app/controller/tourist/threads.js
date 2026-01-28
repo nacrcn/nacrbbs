@@ -78,6 +78,9 @@ export default {
         if (pre.ismy) {
             ordeSql += ` and n_uid = ${Ware.id || 0}`
         }
+        if (pre.isMyBuy) {
+            ordeSql += ` and id in (select n_tid from n_threads_buy where n_uid = ${Ware.id || 0})`
+        }
         const SqlBuilder = new global.SqlBuilder();
         const sql = SqlBuilder
             .add('n_name', pre.search, 'like')
@@ -91,19 +94,7 @@ export default {
             Userid.push(res.data[a].n_uid)
 
         }
-        const User = await global.db.query(`SELECT id,n_nickname,n_avatar FROM n_users WHERE id IN (${Userid.join(',')})`)
-        // 将用户信息添加到帖子数据中
-        const userMap = User.reduce((acc, user) => {
-            acc[user.id] = user;
-            return acc;
-        }, {});
-
-        res.data = res.data.map(thread => {
-            thread.user = userMap[thread.n_uid];
-            return thread;
-        });
-
-
+        
 
         /* 获取分类以及话题 */
         const Tclist = await global.db.query(`SELECT n_cid,n_tid FROM n_tclist WHERE n_tid IN (${res.data.map(item => item.id).join(',')})`)

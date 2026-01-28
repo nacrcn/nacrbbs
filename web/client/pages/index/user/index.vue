@@ -8,42 +8,12 @@
         </div>
 
         <div class="Page">
-            <div>
-                <div :class="['Navlist', { 'nav-open': showMobileNav }]">
-                    <div :class="['Item', {
-                        active: Key === 1
-                    }]" @click="goPage('/user/home', 1)">
-                        <p>我的信息</p>
-                    </div>
-                    <div :class="['Item', {
-
-                        active: Key === 2
-                    }]" @click="goPage('/user/myInfo', 2)">
-                        <p>我的动态</p>
-                    </div>
-                    <div :class="['Item', {
-                        active: Key === 4
-                    }]" @click="goPage('/user/medal', 4)">
-                        <p>勋章中心</p>
-                    </div>
-                    <div :class="['Item', {
-                        active: Key === 3
-                    }]" @click="goPage('/user/bill', 3)">
-                        <p>我的账单</p>
-                    </div>
-                </div>
-                <!-- 手机端侧边栏遮罩 -->
-                <div v-show="showMobileNav" class="mobile-overlay" @click="toggleMobileNav"></div>
-            </div>
             <div class="Content">
                 <NuxtPage />
             </div>
         </div>
 
-        <!-- 手机端导航开关 -->
-        <div class="MobileNav" @click="toggleMobileNav">
-            <icon-menu />
-        </div>
+      
 
 
     </div>
@@ -74,21 +44,6 @@ onMounted(() => {
     getActivity()
 })
 
-const Key = ref(1)
-const goPage = (path, key) => {
-    Key.value = key
-    navigateTo(path)
-    // 手机端点击导航后自动关闭侧边栏
-    if (window.innerWidth <= 1024) {
-        showMobileNav.value = false
-    }
-}
-
-// 手机端导航控制
-const showMobileNav = ref(false)
-const toggleMobileNav = () => {
-    showMobileNav.value = !showMobileNav.value
-}
 
 </script>
 
@@ -174,33 +129,11 @@ const toggleMobileNav = () => {
     margin: 0 auto;
     display: flex;
 
-    .Navlist {
-        width: 160px;
-        border-radius: 20px;
-        background-color: #fff;
-        padding: 20px;
-        margin-right: 10px;
-
-        .Item {
-            line-height: 40px;
-            cursor: pointer;
-            text-align: center;
-            transition: all 0.3s;
-            border-radius: 20px;
-            margin-bottom: 10px;
-        }
-
-        .active {
-            background-color: #e9f5eb;
-            color: #007940;
-        }
-    }
-
+  
     .Content {
-        width: calc(100% - 200px);
+        width: calc(100%);
         overflow: hidden;
         overflow-y: auto;
-        height: calc(100vh - 110px);
     }
 
 
