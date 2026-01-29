@@ -1,6 +1,6 @@
 <template>
     <div class="MainBox">
-        <UserHeader :title="Info.n_name " class="Mob"></UserHeader>
+        <UserHeader :title="Info.n_name " class="MobShows"></UserHeader>
         <div class="Left">
             <div class="MainContent">
 
@@ -633,12 +633,12 @@ const ShareShow = ref(false)
         }
     }
 }
-.Mob{
+.MobShows{
     display: none;
 }
 /* 视口小于768px时的样式 */
 @media (max-width: 768px) {
-    .Mob{
+    .MobShows{
         display: flex;
     }
     .MainBox {
