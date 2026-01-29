@@ -9,7 +9,7 @@
         </h3>
 
         <p class="description">
-            如果您喜欢这个项目，能给我一个 Star 支持一下吗？
+            本项目全开源，若您需要，请在 GitHub 上给个 Star 支持一下，谢谢！
         </p>
 
         <div class="button-wrapper">

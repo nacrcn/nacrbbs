@@ -348,10 +348,10 @@ onMounted(() => {
 
 @media (min-width: 780px) {
     .Page {
-        width: calc(100% - 0px);
-
-        border-radius: 20px;
-        margin-top: 65px;
+       width: calc(100% - 20px);
+        margin: 0 auto;
+        max-width: 1280px;
+        padding-top: 70px;
 
         .TopB {
             background-color: #fff;
