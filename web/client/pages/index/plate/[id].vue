@@ -27,48 +27,41 @@
                             </a-space>
                         </div>
                     </div>
-
-                    <!-- 按钮部分 -->
-                    <!-- <div class="ButtonSection">
-                        <a-button>
-                            <template #icon>
-                                <icon-more />
-                            </template>
-                        </a-button>
-                    </div> -->
+                    <!-- <NavBox :Item="[
+                        {
+                            value: '1',
+                            name: '最新帖子'
+                        },
+                        {
+                            value: '2',
+                            name: '热门帖子'
+                        },
+                        {
+                            value: '3',
+                            name: '图片'
+                        },
+                        {
+                            value: '4',
+                            name: '视频'
+                        },
+                    ]" v-model:modelValue="active" class="Boxsw"></NavBox> -->
                 </div>
 
             </div>
-            <div class="NavLisbox">
-                <div :class="['Item', { active: active === 1 }]" @click="active = 1">
-                    <span>最新帖子</span>
-                </div>
-                <div :class="['Item', { active: active === 2 }]" @click="active = 2">
-                    <span>热门帖子</span>
-                </div>
-                <div :class="['Item', { active: active === 3 }]" @click="active = 3">
-                    <span>图片</span>
-                </div>
-                <div :class="['Item', { active: active === 4 }]" @click="active = 4">
-                    <span>视频</span>
-                </div>
-                <div :class="['Item', { active: active === 5 }]" @click="active = 5">
-                    <span>悬赏贴</span>
-                </div>
-            </div>
+
             <div class="threads">
                 <div class="content-box">
                     <ItemA v-for="value in ThreadsList" :key="value.id" :data="value"></ItemA>
                 </div>
-                 <div class="Isno" style="  width: 100%;
+                <div class="Isno" style="  width: 100%;
                 background-color: #fff;
                 border-radius: 10px;" v-if="ThreadsList.length == 0">
-                <a-result :status="null" title="无内容" subtitle="哎呀，没有内容了">
-                    <template #icon>
-                        <IconFaceSmileFill />
-                    </template>
-                </a-result>
-            </div>
+                    <a-result :status="null" title="无内容" subtitle="哎呀，没有内容了">
+                        <template #icon>
+                            <IconFaceSmileFill />
+                        </template>
+                    </a-result>
+                </div>
                 <div class="PageNav">
                     <a-pagination @change="GetThreads" @page-size-change="GetThreads" v-model:current="from.page"
                         v-model:pageSize="from.pagesize" :total="from.total" size="mini" show-total />
@@ -77,9 +70,6 @@
 
         </div>
         <div class="Right">
-            <div class="UserInfo">
-
-            </div>
             <div class="NavBar">
                 <BoxTitle>热门话题</BoxTitle>
                 <TopicItem v-for="value in TopicList" :key="value.n_name" :data="value"></TopicItem>
@@ -92,7 +82,7 @@
 import { ref, onMounted } from 'vue'
 const route = useRoute()
 const id = route.params.id
-const active = ref(1)
+const active = ref('1')
 
 
 const Info = ref({})
@@ -157,13 +147,17 @@ onMounted(() => {
 
 
 <style lang="scss" scoped>
-
 /* 视口大于768px时的样式 */
 @media (min-width: 768px) {
     .MainBox {
         width: 100%;
         display: flex;
         height: 100%;
+        width: calc(100% - 20px);
+        margin: 0 auto;
+        max-width: 1280px;
+        display: flex;
+        padding-top: 70px;
 
         .Left {
             width: calc(100% - 300px);
@@ -236,68 +230,16 @@ onMounted(() => {
                         }
                     }
 
-
-                    .User {
-                        display: flex;
-                        align-items: center;
-                        gap: 5px;
-
-                        img {
-                            width: 20px;
-                            height: 20px;
-                            border-radius: 50%;
-                        }
-
-                        span {
-                            font-size: 12px;
-                            color: #444;
-                            line-height: 20px;
-                        }
+                    .Boxsw {
+                        width: calc(100% - 40px);
+                        padding: 10px 20px 0px;
+                        background-color: #fff;
+                        border-radius: none;
+                        margin-top: -20px;
                     }
 
-                    .Time {
-                        font-size: 12px;
-                        color: #444;
-                        line-height: 20px;
-                    }
-
-                    .ButtonSection {
-                        position: absolute;
-                        right: 20px;
-                        top: 20px;
-                    }
                 }
 
-                .CommentSection {
-                    padding-top: 10px;
-                    margin-top: 10px;
-                    border-top: 1px solid #ebeff3;
-                    display: flex;
-                    justify-content: center;
-
-                    .Item {
-                        padding: 10px 30px;
-                        text-align: center;
-                        margin: 5px;
-                        border-radius: 100px;
-
-                        &:hover {
-                            background-color: #f0f0f0;
-                            cursor: pointer;
-                        }
-
-                        .icon {
-                            font-size: 25px;
-                            color: #666;
-                            margin-bottom: 5px;
-                        }
-
-                        span {
-                            display: block;
-                            color: #666;
-                        }
-                    }
-                }
             }
 
 
@@ -330,53 +272,6 @@ onMounted(() => {
                 }
             }
 
-
-            .NavLisbox {
-                padding: 10px 20px;
-                background-color: #fff;
-                border-radius: 10px;
-                margin-bottom: 10px;
-                white-space: nowrap;
-                overflow-x: auto;
-
-                .Item {
-                    display: inline-block;
-                    line-height: 30px;
-                    padding: 10px 0;
-                    cursor: pointer;
-                    color: #888888;
-                    margin-right: 20px;
-
-                    .icon {
-                        width: 17px;
-                        height: 17px;
-                        margin-right: 10px;
-                        display: inline-block;
-                        margin-top: 6.5px;
-                    }
-
-                }
-
-                .active {
-                    color: rgb(0, 209, 129);
-                    position: relative;
-
-                    &::after {
-                        content: '';
-                        position: absolute;
-                        left: 15px;
-                        bottom: 1px;
-                        width: calc(100% - 30px);
-                        height: 5px;
-
-                        background-color: rgb(0, 209, 129);
-                    }
-
-                    p {
-                        color: rgb(0, 209, 129);
-                    }
-                }
-            }
         }
 
         .Right {
@@ -447,7 +342,6 @@ onMounted(() => {
                 padding: 10px 10px;
                 border-radius: 10px;
                 background-color: #fff;
-                margin-top: 10px;
 
                 .Item {
                     width: calc(100% - 20px);
@@ -466,12 +360,14 @@ onMounted(() => {
 
 /* 视口小于768px时的样式 */
 @media (max-width: 768px) {
-   .MainBox {
-        width: 100%;
+    .MainBox {
+        width: calc(100% - 20px);
         height: 100%;
+        padding-top: 70px;
+        margin: 0 auto;
 
         .Left {
-            width: calc(100% );
+            width: calc(100%);
             margin: 0 auto;
             overflow-y: auto;
             height: calc(100vh - 70px);
@@ -542,66 +438,14 @@ onMounted(() => {
                     }
 
 
-                    .User {
-                        display: flex;
-                        align-items: center;
-                        gap: 5px;
-
-                        img {
-                            width: 20px;
-                            height: 20px;
-                            border-radius: 50%;
-                        }
-
-                        span {
-                            font-size: 12px;
-                            color: #444;
-                            line-height: 20px;
-                        }
-                    }
-
-                    .Time {
-                        font-size: 12px;
-                        color: #444;
-                        line-height: 20px;
-                    }
-
-                    .ButtonSection {
-                        position: absolute;
-                        right: 20px;
-                        top: 20px;
-                    }
                 }
 
-                .CommentSection {
-                    padding-top: 10px;
-                    margin-top: 10px;
-                    border-top: 1px solid #ebeff3;
-                    display: flex;
-                    justify-content: center;
-
-                    .Item {
-                        padding: 10px 30px;
-                        text-align: center;
-                        margin: 5px;
-                        border-radius: 100px;
-
-                        &:hover {
-                            background-color: #f0f0f0;
-                            cursor: pointer;
-                        }
-
-                        .icon {
-                            font-size: 25px;
-                            color: #666;
-                            margin-bottom: 5px;
-                        }
-
-                        span {
-                            display: block;
-                            color: #666;
-                        }
-                    }
+                .Boxsw {
+                    width: calc(100% - 40px);
+                    padding: 10px 20px 0px;
+                    background-color: #fff;
+                    border-radius: none;
+                    margin-top: -20px;
                 }
             }
 

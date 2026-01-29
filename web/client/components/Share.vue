@@ -144,7 +144,7 @@ const downloadPoster = async () => {
 .poster-header {
     display: flex;
     align-items: center;
-    padding: 20px;
+    padding: 10px;
     border-bottom: 1px solid #f0f0f0;
 
     .avatar {
@@ -174,7 +174,7 @@ const downloadPoster = async () => {
 }
 
 .poster-content {
-    padding: 20px;
+    padding: 10px;
 
     .title {
         font-size: 18px;
@@ -252,7 +252,7 @@ const downloadPoster = async () => {
 .poster-footer {
     display: flex;
     align-items: center;
-    padding: 20px;
+    padding: 10px;
     background: linear-gradient(135deg, #00ad88 0%, #00ad88 100%);
 
     .qr-code {

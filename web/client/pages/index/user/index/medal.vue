@@ -57,7 +57,10 @@ getMedalList()
 
 </script>
 <style lang="scss" scoped>
-.Page {
+
+/* 视口小于768px */
+@media (min-width: 768px) {
+    .Page {
     width: calc(100% - 40px);
     background-color: #fff;
     padding: 20px;
@@ -189,15 +192,138 @@ getMedalList()
         margin-top: 30px;
     }
 }
-/* 视口小于768px */
-
+}
 @media (max-width: 768px) {
-     .medal-grid {
+   .Page {
+    width: calc(100% - 40px);
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 20px;
+
+    .medal-grid {
         display: grid;
         grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
-        gap: 20px;
-        margin-bottom: 30px;
+        gap: 10px;
     }
+
+    .medal-item {
+        background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+        border-radius: 16px;
+        padding: 10px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+
+        &:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        &.earned {
+            border-color: #ff9800;
+            background: linear-gradient(135deg, #fff8e1 0%, #ffffff 100%);
+        }
+    }
+
+    .medal-img-wrapper {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 16px;
+    }
+
+    .medal-img {
+        width: 50px;
+        height: 50px;
+        object-fit: contain;
+        transition: all 0.3s ease;
+
+        &.dimmed {
+            filter: grayscale(100%);
+            opacity: 0.6;
+        }
+    }
+
+    .lock-icon {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        font-size: 32px;
+        text-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+    }
+
+    .medal-info {
+        text-align: center;
+    }
+
+    .medal-name {
+        font-size: 14px;
+        font-weight: 600;
+        color: #1d1d1f;
+        margin: 0 0 8px 0;
+        line-height: 1.4;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .medal-desc {
+        font-size: 11px;
+        color: #86868b;
+        margin: 0 0 12px 0;
+    }
+
+    .medal-status {
+        margin-top: 8px;
+    }
+
+    .status-earned,
+    .status-unearned {
+        display: inline-block;
+        padding: 4px 16px;
+        border-radius: 12px;
+        font-size: 12px;
+        font-weight: 500;
+    }
+
+    .status-earned {
+        background-color: #e3f2fd;
+        color: #1976d2;
+    }
+
+    .status-unearned {
+        background-color: #f5f5f5;
+        color: #9e9e9e;
+    }
+
+    .empty-state {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 80px 20px;
+        color: #86868b;
+
+        .empty-icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+        }
+
+        p {
+            font-size: 16px;
+            margin: 0;
+        }
+    }
+
+    .pagination {
+        display: flex;
+        justify-content: center;
+        margin-top: 30px;
+    }
+}
 
 }
 </style>

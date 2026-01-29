@@ -1,5 +1,6 @@
 <template>
     <div class="MainBox">
+        <UserHeader :title="Info.n_name " class="Mob"></UserHeader>
         <div class="Left">
             <div class="MainContent">
 
@@ -18,7 +19,7 @@
                             </p>
                         </a-space>
                     </div>
-                    <div class="Category">
+                    <div class="Category" v-if="Info.category && Info.category.length > 0">
                         <a-space wrap>
                             <div class="Tag" v-for="value in Info.category" :key="value">
                                 <span v-if="value.n_type == 2">#</span>
@@ -122,12 +123,12 @@
             <div class="UserInfo">
                 <UserBox :id="Info.n_uid"></UserBox>
             </div>
-             <div class="NavBar">
+            <div class="NavBar">
                 <NeedStar></NeedStar>
             </div>
             <div class="NavBar">
                 <BoxTitle>热门话题</BoxTitle>
-               
+
                 <TopicItem v-for="value in TopicList" :key="value.n_name" :data="value"></TopicItem>
             </div>
         </div>
@@ -390,13 +391,17 @@ const ShareShow = ref(false)
 
 
 <style lang="scss" scoped>
-
 /* 视口大于768px时的样式 */
 @media (min-width: 768px) {
     .MainBox {
         width: 100%;
         display: flex;
         height: 100%;
+        width: calc(100% - 20px);
+        margin: 0 auto;
+        max-width: 1280px;
+        display: flex;
+        padding-top: 70px;
 
         .Left {
             width: calc(100% - 300px);
@@ -628,12 +633,19 @@ const ShareShow = ref(false)
         }
     }
 }
-
+.Mob{
+    display: none;
+}
 /* 视口小于768px时的样式 */
 @media (max-width: 768px) {
+    .Mob{
+        display: flex;
+    }
     .MainBox {
-        width: 100%;
+        width: calc(100% - 20px);
         height: 100%;
+        padding-top: 70px;
+        margin: 0 auto;
 
         .Left {
             width: calc(100%);
@@ -645,7 +657,7 @@ const ShareShow = ref(false)
             }
 
             .MainContent {
-                padding: 20px;
+                padding: 20px 20px 0px;
                 background-color: #fff;
                 border-radius: 10px;
                 margin-bottom: 10px;
@@ -720,9 +732,9 @@ const ShareShow = ref(false)
                     margin-top: 10px;
                     border-top: 1px solid #ebeff3;
                     display: flex;
-                    justify-content: center;
 
                     .Item {
+                        width: 100%;
                         padding: 10px 30px;
                         text-align: center;
                         margin: 5px;
@@ -734,7 +746,7 @@ const ShareShow = ref(false)
                         }
 
                         .icon {
-                            font-size: 25px;
+                            font-size: 20px;
                             color: #666;
                             margin-bottom: 5px;
                         }
@@ -742,6 +754,7 @@ const ShareShow = ref(false)
                         span {
                             display: block;
                             color: #666;
+                            font-size: 12px;
                         }
                     }
 

@@ -1,12 +1,6 @@
 <template>
     <div class="PageBox">
-        <!-- 动态背景装饰 -->
-        <div class="bg-decoration">
-            <div class="circle circle-1"></div>
-            <div class="circle circle-2"></div>
-            <div class="circle circle-3"></div>
-        </div>
-
+   
         <div class="Page">
             <div class="Content">
                 <NuxtPage />
@@ -51,8 +45,6 @@ onMounted(() => {
 .PageBox {
     width: calc(100%);
     position: relative;
-    overflow: hidden;
-    min-height: calc(100vh - 80px);
     background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
 }
 

@@ -44,7 +44,6 @@
                 <div class="main-content">
                     <div class="content">
                         <NuxtPage />
-                        <Tabbar></Tabbar>
                     </div>
                 </div>
             </div>
@@ -62,7 +61,7 @@ const MobShow = ref(false)
 
 const GoUser = () => {
     if (UserInfo.$state.UserInfo.id) {
-        navigateTo('/user/home')
+        navigateTo('/user')
     } else {
         navigateTo('/login')
     }
@@ -83,52 +82,52 @@ const GoUser = () => {
         background-color: #f8f8f8;
         background: linear-gradient(135deg, #f5f7fa 0%, #e4e8ec 100%);
 
-        .bg-decoration {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-            overflow: hidden;
+        // .bg-decoration {
+        //     position: fixed;
+        //     top: 0;
+        //     left: 0;
+        //     width: 100%;
+        //     height: 100%;
+        //     pointer-events: none;
+        //     z-index: 0;
+        //     overflow: hidden;
 
-            .circle {
-                position: absolute;
-                border-radius: 50%;
-                opacity: 0.3;
-                filter: blur(80px);
-                animation: float 5s ease-in-out infinite;
+        //     .circle {
+        //         position: absolute;
+        //         border-radius: 50%;
+        //         opacity: 0.3;
+        //         filter: blur(80px);
+        //         animation: float 5s ease-in-out infinite;
 
-                &.circle-1 {
-                    width: 600px;
-                    height: 600px;
-                    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                    top: -200px;
-                    right: -100px;
-                    animation-delay: 0s;
-                }
+        //         &.circle-1 {
+        //             width: 600px;
+        //             height: 600px;
+        //             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        //             top: -200px;
+        //             right: -100px;
+        //             animation-delay: 0s;
+        //         }
 
-                &.circle-2 {
-                    width: 500px;
-                    height: 500px;
-                    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-                    top: -150px;
-                    left: -100px;
-                    animation-delay: -5s;
-                }
+        //         &.circle-2 {
+        //             width: 500px;
+        //             height: 500px;
+        //             background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        //             top: -150px;
+        //             left: -100px;
+        //             animation-delay: -5s;
+        //         }
 
-                &.circle-3 {
-                    width: 400px;
-                    height: 400px;
-                    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
-                    top: 50%;
-                    left: 50%;
-                    transform: translate(-50%, -50%);
-                    animation-delay: -10s;
-                }
-            }
-        }
+        //         &.circle-3 {
+        //             width: 400px;
+        //             height: 400px;
+        //             background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        //             top: 50%;
+        //             left: 50%;
+        //             transform: translate(-50%, -50%);
+        //             animation-delay: -10s;
+        //         }
+        //     }
+        // }
 
         .layout {
             width: calc(100%);

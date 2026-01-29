@@ -7,7 +7,6 @@
             </div>
             <div class="ListBox">
                 <ClassItem v-for="value in ThreadsList" :key="value.n_name" :data="value"></ClassItem>
-
             </div>
 
         </div>

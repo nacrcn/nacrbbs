@@ -119,8 +119,10 @@ onMounted(() => {
 <style lang="scss" scoped>
 @media (max-width: 780px) {
     .Page {
-        width: calc(100% - 0px);
+        width: calc(100% - 20px);
         border-radius: 20px;
+        margin: 0 auto;
+        margin-top: 70px;
         .TopB {
             background-color: #fff;
             border-radius: 25px;
@@ -349,7 +351,7 @@ onMounted(() => {
         width: calc(100% - 0px);
 
         border-radius: 20px;
-
+        margin-top: 65px;
 
         .TopB {
             background-color: #fff;

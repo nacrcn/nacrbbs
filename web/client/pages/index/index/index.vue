@@ -1,313 +1,256 @@
 <template>
-    <div class="MainBox">
-        <div class="MainContent">
-            <div class="TopB">
-                <BoxTitle>花花世界迷人眼</BoxTitle>
-                <div class="TopBox">
-                    <a-input class="search-input" v-model="from.search" placeholder="请输入搜索内容" allow-clear @press-enter="GetThreads">
-                        <template #prefix>
-                            <icon-search />
-                        </template>
-                    </a-input>
-                    <a-button type="primary" class="send-btn" @click="navigateTo('/threadInfo/add')">
-                        <template #icon>
-                            <icon-send />
-                        </template>
-                        <template #default>我有瓜要曝</template>
-                    </a-button>
+    <div class="PageBox">
+        <div class="PageContent">
+            <div class="Sidebar">
+                <div class="NavBar">
+                    <div :class="['Item', { active: IndexShow === 1 }]" @click="changeIndexShow(1, '/follow')">
+                        <icon-heart class="icon" />
+                        <p>我的关注</p>
+                    </div>
+                    <div :class="['Item', { active: IndexShow === 2 }]" @click="changeIndexShow(2, '/')">
+                        <icon-fire class="icon" />
+                        <p>热门瓜子</p>
+                    </div>
+                    <div :class="['Item', { active: IndexShow === 3 }]" @click="changeIndexShow(3, '/class')">
+                        <icon-branch class="icon" />
+                        <p>热门圈子</p>
+                    </div>
+                    <div :class="['Item', { active: IndexShow === 4 }]" @click="changeIndexShow(4, '/images')">
+                        <icon-image class="icon" />
+                        <p>视频图片</p>
+                    </div>
+                    <div :class="['Item', { active: IndexShow === 6 }]" @click="changeIndexShow(6, '/uplist')">
+                        <icon-user class="icon" />
+                        <p>热门UP主</p>
+                    </div>
                 </div>
-                <div class="select">
-                    <NavBox :Item="[
-                        {
-                            value: 'id',
-                            name: '最新贴子'
-                        },
-                        {
-                            value: 'n_msglastTime',
-                            name: '最新回复'
-                        },
-                        {
-                            value: 'n_starts',
-                            name: '点赞最多'
-                        },
-                        {
-                            value: 'n_read',
-                            name: '阅读最多'
-                        },
-                    ]" v-model:modelValue="from.sort" @change="GetThreads"></NavBox>
-                </div>
-            </div>
-             <FlexBox :data="ThreadsList" :columns="2" :gap="10" :loading="loading">
-                <template #item="{ item }">
-                    <ItemA :data="item"></ItemA>
-                </template>
-            </FlexBox>
 
-            <div class="PageNav">
-                <a-pagination @change="GetThreads" @page-size-change="GetThreads" v-model:current="from.page"
-                    v-model:pageSize="from.pagesize" :total="from.total" size="mini" show-total />
+            </div>
+            <div class="Content">
+                <NuxtPage />
+                <Tabbar></Tabbar>
             </div>
         </div>
-        <div class="SidebarRight">
-            <div class="NavBar">
-                <BoxTitle>热门圈子</BoxTitle>
-                <ClassItem v-for="value in CategoryList" :key="value.n_name" :data="value"></ClassItem>
-            </div>
-            <div class="NavBar">
-                <BoxTitle>热门话题</BoxTitle>
-                <TopicItem v-for="value in TopicList" :key="value.n_name" :data="value"></TopicItem>
-            </div>
-            <div class="NavBar">
-                <NeedStar></NeedStar>
-            </div>
-        </div>
+
+
+
     </div>
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
 import { Message } from '@arco-design/web-vue';
-/* 获取分类列表 GetCategory */
-const CategoryList = ref([])
-const GetCategory = async () => {
-    try {
-        const res = await useApiFetch().post('/api/GetCategory')
-        if (res.code == 200) {
-            CategoryList.value = res.data
-        } else {
-            Message.error(res.message || '获取分类列表失败')
-        }
+const SiteConfig = useSiteConfig()
 
-    } catch (error) {
-        Message.error(error.message)
-    }
-}
+useSeoSet({
+    title: SiteConfig.$state.Config.n_web_title,
+    description: SiteConfig.$state.Config.n_web_desc,
+    keywords: SiteConfig.$state.Config.n_web_keys,
 
-/* 获取话题列表 */
-const TopicList = ref([])
-const GetTopicList = async () => {
-    try {
-        const res = await useApiFetch().post('/api/GetCategory', {
-            type: 2
-        })
-        if (res.code == 200) {
-            TopicList.value = res.data
-        } else {
-            Message.error(res.message || '获取分类列表失败')
-        }
-
-    } catch (error) {
-        Message.error(error.message)
-    }
-}
-
-/* 获取文章列表 GetThreads */
-const ThreadsList = ref([])
-const from = ref({
-    page: 1,
-    pagesize: 10,
-    total: 0,
-    search: '',
-    sort: 'id'
 })
-const loading = ref(false)
 
-const GetThreads = async () => {
-    try {
-        loading.value = true
-        const res = await useApiFetch().post('/api/GetThreads', from.value)
-        if (res.code == 200) {
-            ThreadsList.value = res.data
-            from.value.total = res.total
-        } else {
-            // Message.error(res.message || '获取文章列表失败')
-        }
-        loading.value = false
-    } catch (error) {
-        Message.error(error.message)
-    }
+
+
+const IndexShow = ref(2)
+/* 切换页面 */
+const changeIndexShow = (index, path) => {
+    IndexShow.value = index
+    navigateTo(path)
 }
 
-onMounted(() => {
-    GetCategory()
-    GetTopicList()
-    GetThreads()
-})
+
 </script>
-
-
 <style lang="scss" scoped>
-
-/* 视口大于768px时的样式 */
+/* 视口小于768px时的样式 */
 @media (min-width: 768px) {
-    .MainBox {
-        display: flex;
-        width: 100%;
 
-        .MainContent {
-            width: calc(100% - 250px);
+    .PageBox {
+        width: calc(100%);
+        height: calc(100vh);
+        position: relative;
+        overflow: hidden;
 
-            .TopB {
-                width: calc(100% - 20px);
-                padding: 10px;
-                background-color: #fff;
-                border-radius: 10px;
-                margin-bottom: 10px;
-                .select {
-                    margin-top: 10px;
-                    margin-left: 4px;
+        .PageContent {
+            margin: 0 auto;
+            max-width: 1280px;
+            display: flex;
+            padding-top: 70px;
+
+            .Sidebar {
+                max-height: calc(100vh - 180px);
+                overflow: hidden;
+                overflow-y: auto;
+
+                /* 隐藏滚动条 */
+                &::-webkit-scrollbar {
+                    display: none;
                 }
 
-                .TopBox {
+                .NavBar {
+                    width: calc(150px - 20px);
+                    padding: 10px 10px;
+                    border-radius: 10px;
+                    background-color: #fff;
+                    margin-bottom: 10px;
 
-                    display: flex;
+                    .Item {
+                        padding: 10px 0;
+                        cursor: pointer;
+                        display: flex;
+                        line-height: 30px;
+                        padding-left: 10px;
+                        color: #888888;
 
-                    .search-input {
-                        width: calc(100% - 120px);
-                        border-radius: 7px;
+                        .icon {
+                            width: 17px;
+                            height: 17px;
+                            margin-right: 10px;
+                            margin-top: 6.5px;
+                        }
+
+                        p {
+                            font-size: 16px;
+                            color: #333;
+                        }
                     }
 
-                    .send-btn {
-                        border-radius: 7px;
-                        margin-left: 10px;
-                        background-color: rgb(0, 209, 129);
+                    .active {
+                        color: rgb(0, 209, 129);
+                        position: relative;
+
+                        &::after {
+                            content: '';
+                            position: absolute;
+                            left: -10px;
+                            top: 15px;
+                            width: 5px;
+                            height: calc(100% - 30px);
+
+                            background-color: rgb(0, 209, 129);
+                        }
+
+                        p {
+                            color: rgb(0, 209, 129);
+                        }
                     }
                 }
-
-            }
-
-            .PageNav {
-                width: calc(100% - 20px);
-                margin-top: 10px;
-                display: flex;
-                padding: 10px;
-                border-radius: 10px;
-                background-color: #fff;
-                justify-content: center;
             }
 
 
+            .Content {
+                width: calc(100% - 150px);
+                overflow: hidden;
+                margin-left: 10px;
+                overflow-y: auto;
+                height: calc(100vh - 70px);
+
+                /* 隐藏滚动条 */
+                &::-webkit-scrollbar {
+                    display: none;
+                }
+            }
         }
 
-        .SidebarRight {
-            max-height: calc(100vh - 180px);
-            overflow: hidden;
-            overflow-y: auto;
-            margin-left: 10px;
-
-            /* 隐藏滚动条 */
-            &::-webkit-scrollbar {
-                display: none;
-            }
-
-            .NavBar {
-                width: calc(250px - 20px);
-                padding: 10px 10px;
-                border-radius: 10px;
-                background-color: #fff;
-                margin-bottom: 10px;
-
-                .Item {
-                    width: calc(100% - 20px);
-                    padding: 10px 0;
-                    cursor: pointer;
-
-                    p {
-                        font-size: 16px;
-                        color: #333;
-                    }
-                }
-            }
-        }
 
     }
+
 }
 
 /* 视口小于768px时的样式 */
 @media (max-width: 768px) {
-    .MainBox {
-        display: flex;
-        width: 100%;
 
-        .MainContent {
-            width: calc(100%);
+    .PageBox {
+        width: calc(100%);
+        min-height: calc(100vh);
+        position: relative;
+        overflow: hidden;
 
-            .TopB {
-                width: calc(100% - 20px);
-                padding: 10px;
-                background-color: #fff;
-                border-radius: 10px;
-                margin-bottom: 10px;
+        .PageContent {
+            width: calc(100% - 20px);
+            margin: 0 auto;
+            max-width: 1280px;
+            margin-top: 65px;
 
-                .select {
-                    margin-top: 10px;
-                    margin-left: 4px;
+            .Sidebar {
+                max-height: calc(100vh - 180px);
+                overflow: hidden;
+                overflow-y: auto;
+
+                /* 隐藏滚动条 */
+                &::-webkit-scrollbar {
+                    display: none;
                 }
 
-                .TopBox {
-
-                    display: flex;
-
-                    .search-input {
-                        width: calc(100% - 120px);
-                        border-radius: 7px;
-                    }
-
-                    .send-btn {
-                        border-radius: 7px;
-                        margin-left: 10px;
-                        background-color: rgb(0, 209, 129);
-                    }
-                }
-
-            }
-
-
-            .PageNav {
-                width: calc(100% - 20px);
-                margin-top: 10px;
-                display: flex;
-                padding: 10px;
-                border-radius: 10px;
-                background-color: #fff;
-                justify-content: center;
-            }
-
-
-        }
-
-        .SidebarRight {
-            max-height: calc(100vh - 180px);
-            overflow: hidden;
-            overflow-y: auto;
-            margin-left: 10px;
-            display: none;
-
-            /* 隐藏滚动条 */
-            &::-webkit-scrollbar {
-                display: none;
-            }
-
-            .NavBar {
-                width: calc(250px - 20px);
-                padding: 10px 10px;
-                border-radius: 10px;
-                background-color: #fff;
-                margin-bottom: 10px;
-
-                .Item {
+                .NavBar {
                     width: calc(100% - 20px);
-                    padding: 10px 0;
-                    cursor: pointer;
+                    padding: 0px 10px;
+                    border-radius: 10px;
+                    background-color: #fff;
+                    margin-bottom: 5px;
+                    white-space: nowrap;
+                    overflow-x: auto;
 
-                    p {
-                        font-size: 16px;
-                        color: #333;
+                    .Item {
+                        padding: 10px 0;
+                        cursor: pointer;
+                        display: inline-block;
+                        line-height: 30px;
+                        padding-left: 10px;
+                        color: #888888;
+                        margin-right: 10px;
+
+                        .icon {
+                            width: 17px;
+                            height: 17px;
+                            margin-right: 10px;
+                            display: inline-block;
+                            margin-top: 6.5px;
+                        }
+
+                        p {
+                            font-size: 16px;
+                            color: #333;
+                            display: inline-block;
+                        }
+                    }
+
+                    .active {
+                        color: rgb(0, 209, 129);
+                        position: relative;
+
+                        &::after {
+                            content: '';
+                            position: absolute;
+                            left: 25px;
+                            bottom: 1px;
+                            width: calc(100% - 30px);
+                            height: 5px;
+
+                            background-color: rgb(0, 209, 129);
+                        }
+
+                        p {
+                            color: rgb(0, 209, 129);
+                        }
                     }
                 }
             }
+
+
+
+            .Content {
+                width: calc(100%);
+                min-height: calc(100vh - 200px);
+                padding-bottom: 20px;
+
+                /* 隐藏滚动条 */
+                &::-webkit-scrollbar {
+                    display: none;
+                }
+            }
         }
+
 
     }
+
 }
 </style>

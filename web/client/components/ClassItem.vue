@@ -6,6 +6,7 @@
         </div>
         <div class="UserDetail">
             <p class="nickname">{{ data.n_name }}</p>
+            <p class="note">{{ data.n_note }}</p>
             <div class="Interactions">
                 <span class="item">
                     <span class="label">热度：</span>
@@ -63,18 +64,18 @@ const formatNumber = (num) => {
     }
 
     .Avatar {
-        width: 50px;
+        width: 60px;
         margin: 5px;
 
         img {
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
             border-radius: 10px;
         }
     }
 
     .UserDetail {
-        padding-top: 10px;
+        padding-top: 4px;
         margin-left: 7px;
         width: calc(100% - 80px);
 
@@ -82,6 +83,11 @@ const formatNumber = (num) => {
             color: #000000;
             font-size: 16px;
             font-weight: 800;
+        }
+        .note{
+            font-size: 12px;
+            color: #999;
+            margin: 5px 0px;
         }
 
         .time {

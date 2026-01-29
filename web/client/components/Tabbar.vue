@@ -10,7 +10,7 @@
                 <icon-relation class="icon" />
                 <p>圈子</p>
             </div>
-            <div :class="['TabbarItem', { active: ShowIndex == '/user/home' }]" @click="ChangePage('/user/home')">
+            <div :class="['TabbarItem', { active: ShowIndex == '/user' }]" @click="ChangePage('/user')">
                 <icon-user class="icon" />
                 <p>我的</p>
             </div>

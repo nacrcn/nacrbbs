@@ -305,10 +305,10 @@ const goHome = () => {
     }
 
     .LoginBox {
-        width: calc(100% - 40px);
+        width: calc(100% - 60px);
         padding: 30px 20px;
-        top: 70px;
-        transform: translate(-50%, 0);
+        top: 50%;
+        transform: translate(-50%, -50%);
     }
 }
 </style>

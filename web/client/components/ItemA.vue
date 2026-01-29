@@ -49,7 +49,7 @@
                 </div>
             </div>
 
-            <div class="PostActions">
+            <div class="PostActions" v-if="data.category && data.category.length > 0">
                 <div class="Category">
                     <a-space wrap>
                         <div class="Tag" v-for="value in data.category" :key="value">
@@ -403,7 +403,7 @@ watch(() => props.data, (newVal, oldVal) => {
             align-items: center;
             gap: 10px;
             justify-content: center;
-            margin-top: 20px;
+            margin-top: 10px;
             margin-bottom: 10px;
 
             .item {

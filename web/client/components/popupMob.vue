@@ -282,7 +282,7 @@ const ok = () => {
 @media screen and (min-width: 768px) {
     .downBoxTosavtive {
         opacity: 1;
-        z-index: 99;
+        z-index: 99999;
 
         .Neibox {
             bottom: 50%;
