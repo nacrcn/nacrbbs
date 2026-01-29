@@ -1,6 +1,9 @@
 <template>
     <div class="MainBox">
-        <UserHeader :title="Info.n_name " class="MobShows"></UserHeader>
+        <div class="MobShows">
+        <UserHeader :title="Info.n_name " ></UserHeader>
+
+        </div>
         <div class="Left">
             <div class="MainContent">
 
@@ -634,7 +637,7 @@ const ShareShow = ref(false)
     }
 }
 .MobShows{
-    display: none;
+    display: none!important;
 }
 /* 视口小于768px时的样式 */
 @media (max-width: 768px) {
